@@ -4,9 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Travian AI</title>
-
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -20,8 +18,6 @@
 </header>
 
 <main>
-
-<!-- DASHBOARD -->
 
 <section class="dashboard">
 
@@ -48,8 +44,6 @@
 </section>
 
 
-<!-- VILLAGE -->
-
 <section class="card">
 
 <h2>🏠 פרטי כפר</h2>
@@ -73,22 +67,15 @@
 
 <div class="field">
 <label>בירה</label>
-
 <select id="isCapital">
-
 <option value="false">לא</option>
 <option value="true">כן</option>
-
 </select>
-
 </div>
 
 </div>
-
 </section>
 
-
-<!-- RESOURCES -->
 
 <section class="card">
 
@@ -118,7 +105,6 @@
 
 </div>
 
-
 <h3>ייצור לשעה</h3>
 
 <div class="grid">
@@ -145,7 +131,6 @@
 
 </div>
 
-
 <h3>אחסון</h3>
 
 <div class="grid">
@@ -170,8 +155,6 @@
 </section>
 
 
-<!-- RESOURCE FIELDS -->
-
 <section class="card">
 
 <h2>🌲 שדות משאבים</h2>
@@ -190,8 +173,6 @@ placeholder="wood: 10,10,9,9,8,8 | clay: 10,10,9,9,8,8 | iron: 10,10,9,9,8,8 | c
 
 </section>
 
-
-<!-- BUILDINGS -->
 
 <section class="card">
 
@@ -274,8 +255,6 @@ placeholder="wood: 10,10,9,9,8,8 | clay: 10,10,9,9,8,8 | iron: 10,10,9,9,8,8 | c
 </section>
 
 
-<!-- TROOPS -->
-
 <section class="card">
 
 <h2>⚔️ צבא רומאי</h2>
@@ -337,8 +316,6 @@ placeholder="wood: 10,10,9,9,8,8 | clay: 10,10,9,9,8,8 | iron: 10,10,9,9,8,8 | c
 </section>
 
 
-<!-- HERO -->
-
 <section class="card">
 
 <h2>🦸 גיבור</h2>
@@ -364,8 +341,6 @@ placeholder="wood: 10,10,9,9,8,8 | clay: 10,10,9,9,8,8 | iron: 10,10,9,9,8,8 | c
 
 </section>
 
-
-<!-- OASIS -->
 
 <section class="card">
 
@@ -403,8 +378,6 @@ placeholder="wood: 10,10,9,9,8,8 | clay: 10,10,9,9,8,8 | iron: 10,10,9,9,8,8 | c
 </section>
 
 
-<!-- QUEUES -->
-
 <section class="card">
 
 <h2>⏱️ תורים</h2>
@@ -436,25 +409,17 @@ placeholder="wood: 10,10,9,9,8,8 | clay: 10,10,9,9,8,8 | iron: 10,10,9,9,8,8 | c
 </section>
 
 
-<!-- ACTIONS -->
-
 <section class="card">
 
 <h2>⚙️ פעולות</h2>
 
 <div class="button-row">
 
-<button onclick="saveVillage()">
-💾 שמור כפר
-</button>
+<button onclick="saveVillage()">💾 שמור כפר</button>
 
-<button onclick="clearForm()">
-🧹 נקה טופס
-</button>
+<button onclick="clearForm()">🧹 נקה טופס</button>
 
-<button onclick="exportData()">
-📤 ייצא חשבון
-</button>
+<button onclick="exportData()">📤 ייצא חשבון</button>
 
 <button onclick="document.getElementById('importFile').click()">
 📥 ייבא חשבון
@@ -472,8 +437,6 @@ onchange="importData(event)">
 </section>
 
 
-<!-- VILLAGES -->
-
 <section class="card">
 
 <h2>🏰 הכפרים שלי</h2>
@@ -483,20 +446,15 @@ onchange="importData(event)">
 </section>
 
 
-<!-- AI -->
-
 <section class="card">
 
 <h2>🧠 Travian AI</h2>
 
 <div id="aiAnalysis" class="analysis">
-
 הוסף נתוני כפרים כדי לקבל ניתוח.
-
 </div>
 
 </section>
-
 
 </main>
 
@@ -506,6 +464,9 @@ onchange="importData(event)">
 <script src="data/buildings.js"></script>
 <script src="data/calculator.js"></script>
 <script src="data/building-costs.js"></script>
-    <script src="app.js"></script>
+<script src="data/troop-costs.js"></script>
+<script src="data/ai-engine.js"></script>
+<script src="app.js"></script>
+
 </body>
 </html>
