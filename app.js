@@ -1,371 +1,755 @@
-let account=JSON.parse(localStorage.getItem("travianAccount"))||{
-tribe:"Romans",
-serverSpeed:3,
-villages:[]
+// ========================================
+// TRAVIAN AI — ACCOUNT ENGINE
+// ========================================
+
+let account = JSON.parse(
+    localStorage.getItem("travianAccount")
+) || {
+    tribe: "Romans",
+    serverSpeed: 3,
+    villages: []
 };
 
-let editingVillageId=null;
+let editingVillageId = null;
 
-const ids=[
-"villageName","coordinates","population","isCapital",
-"wood","clay","iron","crop",
-"woodProd","clayProd","ironProd","cropProd",
-"warehouse","granary","cropConsumption",
-"mainBuilding","residence","palace","heroMansion",
-"warehouseBuilding","granaryBuilding","barracks","stable",
-"workshop","academy","smithy","market","rallyPoint","cityWall",
-"legionnaire","praetorian","imperian","equitesLegati",
-"equitesImperatoris","equitesCaesaris","ram","fireCatapult",
-"senator","settler","heroLevel","heroXP","heroHealth",
-"oasisCount","oasisWood","oasisClay","oasisIron","oasisCrop",
-"buildingQueue","fieldQueue","barracksQueue","stableQueue",
-"resourceFields"
-];
 
-function value(id){
-const e=document.getElementById(id);
-return e?e.value:"";
+// ========================================
+// HELPERS
+// ========================================
+
+function get(id) {
+    const element = document.getElementById(id);
+    return element ? element.value : "";
 }
 
-function num(id){
-return Number(value(id))||0;
+function num(id) {
+    return Number(get(id)) || 0;
 }
 
-function set(id,v){
-const e=document.getElementById(id);
-if(e)e.value=v??"";
+function set(id, value) {
+    const element = document.getElementById(id);
+    if (element) element.value = value ?? "";
 }
 
-function saveAccount(){
-localStorage.setItem("travianAccount",JSON.stringify(account));
+function saveAccount() {
+    localStorage.setItem(
+        "travianAccount",
+        JSON.stringify(account)
+    );
 }
 
-function saveVillage(){
 
-const name=value("villageName").trim();
+// ========================================
+// VILLAGE DATA
+// ========================================
 
-if(!name){
-alert("נא להזין שם כפר");
-return;
+function collectVillageData() {
+
+    const buildings = {};
+
+    Object.keys(BUILDINGS).forEach(key => {
+        const element = document.getElementById(key);
+
+        if (element) {
+            buildings[key] = Number(element.value) || 0;
+        }
+    });
+
+
+    const troops = {};
+
+    Object.keys(ROMAN_TROOPS).forEach(key => {
+        const element = document.getElementById(key);
+
+        if (element) {
+            troops[key] = Number(element.value) || 0;
+        }
+    });
+
+
+    return {
+
+        name: get("villageName").trim(),
+
+        coordinates: get("coordinates"),
+
+        population: num("population"),
+
+        isCapital: get("isCapital") === "true",
+
+
+        resources: {
+            wood: num("wood"),
+            clay: num("clay"),
+            iron: num("iron"),
+            crop: num("crop")
+        },
+
+
+        production: {
+            wood: num("woodProd"),
+            clay: num("clayProd"),
+            iron: num("ironProd"),
+            crop: num("cropProd")
+        },
+
+
+        storage: {
+            warehouse: num("warehouse"),
+            granary: num("granary")
+        },
+
+
+        cropConsumption: num("cropConsumption"),
+
+
+        resourceFields: parseResourceFields(
+            get("resourceFields")
+        ),
+
+
+        buildings,
+
+
+        troops,
+
+
+        hero: {
+            level: num("heroLevel"),
+            experience: num("heroXP"),
+            health: num("heroHealth")
+        },
+
+
+        oasis: {
+            count: num("oasisCount"),
+            wood: num("oasisWood"),
+            clay: num("oasisClay"),
+            iron: num("oasisIron"),
+            crop: num("oasisCrop")
+        },
+
+
+        queues: {
+            building: get("buildingQueue"),
+            field: get("fieldQueue"),
+            barracks: get("barracksQueue"),
+            stable: get("stableQueue")
+        },
+
+
+        updatedAt: new Date().toISOString()
+    };
 }
 
-const buildings={};
 
-[
-"mainBuilding","residence","palace","heroMansion",
-"warehouseBuilding","granaryBuilding","barracks",
-"stable","workshop","academy","smithy","market",
-"rallyPoint","cityWall"
-].forEach(x=>buildings[x]=num(x));
+// ========================================
+// RESOURCE FIELD PARSER
+// ========================================
 
-const village={
-id:editingVillageId||Date.now(),
-name,
-coordinates:value("coordinates"),
-population:num("population"),
-isCapital:value("isCapital")==="true",
+function parseResourceFields(text) {
 
-resources:{
-wood:num("wood"),
-clay:num("clay"),
-iron:num("iron"),
-crop:num("crop")
-},
+    const result = {
+        wood: [],
+        clay: [],
+        iron: [],
+        crop: []
+    };
 
-production:{
-wood:num("woodProd"),
-clay:num("clayProd"),
-iron:num("ironProd"),
-crop:num("cropProd")
-},
+    if (!text) return result;
 
-storage:{
-warehouse:num("warehouse"),
-granary:num("granary")
-},
 
-cropConsumption:num("cropConsumption"),
+    const sections = text.split("|");
 
-resourceFields:value("resourceFields"),
+    sections.forEach(section => {
 
-buildings,
+        const parts = section.split(":");
 
-troops:{
-legionnaire:num("legionnaire"),
-praetorian:num("praetorian"),
-imperian:num("imperian"),
-equitesLegati:num("equitesLegati"),
-equitesImperatoris:num("equitesImperatoris"),
-equitesCaesaris:num("equitesCaesaris"),
-ram:num("ram"),
-fireCatapult:num("fireCatapult"),
-senator:num("senator"),
-settler:num("settler")
-},
+        if (parts.length !== 2) return;
 
-hero:{
-level:num("heroLevel"),
-experience:num("heroXP"),
-health:num("heroHealth")
-},
+        const type = parts[0].trim();
 
-oasis:{
-count:num("oasisCount"),
-wood:num("oasisWood"),
-clay:num("oasisClay"),
-iron:num("oasisIron"),
-crop:num("oasisCrop")
-},
+        const levels = parts[1]
+            .split(",")
+            .map(x => Number(x.trim()))
+            .filter(x => !isNaN(x));
 
-queues:{
-building:value("buildingQueue"),
-field:value("fieldQueue"),
-barracks:value("barracksQueue"),
-stable:value("stableQueue")
-},
 
-updatedAt:new Date().toISOString()
-};
+        if (result[type]) {
+            result[type] = levels;
+        }
 
-const index=account.villages.findIndex(v=>v.id===village.id);
+    });
 
-if(index>=0)
-account.villages[index]=village;
-else
-account.villages.push(village);
 
-editingVillageId=null;
-
-saveAccount();
-renderVillages();
-clearForm();
+    return result;
 }
 
-function editVillage(id){
 
-const v=account.villages.find(x=>x.id===id);
-if(!v)return;
+// ========================================
+// SAVE VILLAGE
+// ========================================
 
-editingVillageId=id;
+function saveVillage() {
 
-set("villageName",v.name);
-set("coordinates",v.coordinates);
-set("population",v.population);
-set("isCapital",v.isCapital?"true":"false");
+    const name = get("villageName").trim();
 
-["wood","clay","iron","crop"].forEach(x=>set(x,v.resources[x]));
-["wood","clay","iron","crop"].forEach(x=>set(x+"Prod",v.production[x]));
+    if (!name) {
+        alert("נא להזין שם כפר.");
+        return;
+    }
 
-set("warehouse",v.storage.warehouse);
-set("granary",v.storage.granary);
-set("cropConsumption",v.cropConsumption);
 
-set("resourceFields",v.resourceFields);
+    const data = collectVillageData();
 
-Object.entries(v.buildings||{}).forEach(([k,val])=>set(k,val));
 
-Object.entries(v.troops||{}).forEach(([k,val])=>set(k,val));
+    if (editingVillageId !== null) {
 
-set("heroLevel",v.hero?.level);
-set("heroXP",v.hero?.experience);
-set("heroHealth",v.hero?.health);
+        const index =
+            account.villages.findIndex(
+                village => village.id === editingVillageId
+            );
 
-Object.entries(v.oasis||{}).forEach(([k,val])=>set("oasis"+k.charAt(0).toUpperCase()+k.slice(1),val));
 
-set("buildingQueue",v.queues?.building);
-set("fieldQueue",v.queues?.field);
-set("barracksQueue",v.queues?.barracks);
-set("stableQueue",v.queues?.stable);
+        if (index !== -1) {
 
-window.scrollTo({top:0,behavior:"smooth"});
+            account.villages[index] = {
+                ...account.villages[index],
+                ...data
+            };
+
+        }
+
+    } else {
+
+        account.villages.push({
+            id: Date.now(),
+            ...data
+        });
+
+    }
+
+
+    editingVillageId = null;
+
+    saveAccount();
+
+    renderVillages();
+
+    clearForm();
 }
 
-function deleteVillage(id){
 
-if(!confirm("למחוק את הכפר?"))return;
+// ========================================
+// EDIT VILLAGE
+// ========================================
 
-account.villages=account.villages.filter(v=>v.id!==id);
+function editVillage(id) {
 
-saveAccount();
-renderVillages();
+    const village =
+        account.villages.find(
+            village => village.id === id
+        );
+
+
+    if (!village) return;
+
+
+    editingVillageId = id;
+
+
+    set("villageName", village.name);
+    set("coordinates", village.coordinates);
+    set("population", village.population);
+
+    set(
+        "isCapital",
+        village.isCapital ? "true" : "false"
+    );
+
+
+    set("wood", village.resources.wood);
+    set("clay", village.resources.clay);
+    set("iron", village.resources.iron);
+    set("crop", village.resources.crop);
+
+
+    set("woodProd", village.production.wood);
+    set("clayProd", village.production.clay);
+    set("ironProd", village.production.iron);
+    set("cropProd", village.production.crop);
+
+
+    set("warehouse", village.storage.warehouse);
+    set("granary", village.storage.granary);
+    set("cropConsumption", village.cropConsumption);
+
+
+    Object.entries(village.buildings || {})
+        .forEach(([key, value]) => {
+            set(key, value);
+        });
+
+
+    Object.entries(village.troops || {})
+        .forEach(([key, value]) => {
+            set(key, value);
+        });
+
+
+    set("heroLevel", village.hero?.level);
+    set("heroXP", village.hero?.experience);
+    set("heroHealth", village.hero?.health ?? 100);
+
+
+    set("oasisCount", village.oasis?.count);
+    set("oasisWood", village.oasis?.wood);
+    set("oasisClay", village.oasis?.clay);
+    set("oasisIron", village.oasis?.iron);
+    set("oasisCrop", village.oasis?.crop);
+
+
+    set("buildingQueue", village.queues?.building);
+    set("fieldQueue", village.queues?.field);
+    set("barracksQueue", village.queues?.barracks);
+    set("stableQueue", village.queues?.stable);
+
+
+    const fields = village.resourceFields;
+
+    if (fields) {
+
+        set(
+            "resourceFields",
+            `wood: ${fields.wood.join(",")}| clay: ${fields.clay.join(",")}| iron: ${fields.iron.join(",")}| crop: ${fields.crop.join(",")}`
+        );
+
+    }
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
-function renderVillages(){
 
-const c=document.getElementById("villagesContainer");
+// ========================================
+// DELETE VILLAGE
+// ========================================
 
-if(!account.villages.length){
-c.innerHTML='<div class="empty">עדיין לא הוספת כפרים.</div>';
-updateDashboard();
-return;
+function deleteVillage(id) {
+
+    if (!confirm("למחוק את הכפר?")) return;
+
+
+    account.villages =
+        account.villages.filter(
+            village => village.id !== id
+        );
+
+
+    saveAccount();
+
+    renderVillages();
 }
 
-let html=`
-<table>
-<thead>
-<tr>
-<th>כפר</th>
-<th>מיקום</th>
-<th>אוכלוסייה</th>
-<th>עץ</th>
-<th>טיט</th>
-<th>ברזל</th>
-<th>יבול</th>
-<th>יבול נטו</th>
-<th>פעולות</th>
-</tr>
-</thead>
-<tbody>
-`;
 
-account.villages.forEach(v=>{
+// ========================================
+// DASHBOARD
+// ========================================
 
-const net=v.production.crop-v.cropConsumption;
+function updateDashboard() {
 
-html+=`
-<tr>
-<td><strong>${v.name}</strong>${v.isCapital?" 🏛️":""}</td>
-<td>${v.coordinates||"-"}</td>
-<td>${v.population.toLocaleString()}</td>
-<td>${v.resources.wood.toLocaleString()}</td>
-<td>${v.resources.clay.toLocaleString()}</td>
-<td>${v.resources.iron.toLocaleString()}</td>
-<td>${v.resources.crop.toLocaleString()}</td>
-<td>${net.toLocaleString()}/h</td>
-<td>
-<button onclick="editVillage(${v.id})">✏️</button>
-<button onclick="deleteVillage(${v.id})">🗑️</button>
-</td>
-</tr>
-`;
-});
+    let population = 0;
+    let troops = 0;
+    let netCrop = 0;
 
-html+="</tbody></table>";
 
-c.innerHTML=html;
+    account.villages.forEach(village => {
 
-updateDashboard();
-updateAI();
+        population += village.population;
+
+
+        Object.values(village.troops || {})
+            .forEach(amount => {
+                troops += Number(amount) || 0;
+            });
+
+
+        netCrop +=
+            village.production.crop -
+            village.cropConsumption;
+
+    });
+
+
+    set("villageCount", account.villages.length);
+
+    set(
+        "populationTotal",
+        population.toLocaleString()
+    );
+
+    set(
+        "troopsTotal",
+        troops.toLocaleString()
+    );
+
+    set(
+        "netCropTotal",
+        netCrop.toLocaleString()
+    );
 }
 
-function updateDashboard(){
 
-let population=0;
-let troops=0;
-let crop=0;
+// ========================================
+// VILLAGE TABLE
+// ========================================
 
-account.villages.forEach(v=>{
+function renderVillages() {
 
-population+=v.population;
+    const container =
+        document.getElementById("villagesContainer");
 
-Object.values(v.troops||{}).forEach(x=>troops+=Number(x)||0);
 
-crop+=v.production.crop-v.cropConsumption;
-});
+    if (!container) return;
 
-set("villageCount",account.villages.length);
-set("populationTotal",population.toLocaleString());
-set("troopsTotal",troops.toLocaleString());
-set("netCropTotal",crop.toLocaleString());
+
+    if (!account.villages.length) {
+
+        container.innerHTML = `
+            <div class="empty">
+                עדיין לא הוספת כפרים.
+            </div>
+        `;
+
+        updateDashboard();
+        updateAI();
+
+        return;
+    }
+
+
+    let html = `
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>כפר</th>
+                    <th>מיקום</th>
+                    <th>אוכלוסייה</th>
+                    <th>עץ</th>
+                    <th>טיט</th>
+                    <th>ברזל</th>
+                    <th>יבול</th>
+                    <th>יבול נטו</th>
+                    <th>פעולות</th>
+                </tr>
+            </thead>
+
+            <tbody>
+    `;
+
+
+    account.villages.forEach(village => {
+
+        const netCrop =
+            village.production.crop -
+            village.cropConsumption;
+
+
+        html += `
+
+            <tr>
+
+                <td>
+                    <strong>
+                        ${village.name}
+                    </strong>
+
+                    ${village.isCapital ? " 🏛️" : ""}
+                </td>
+
+                <td>
+                    ${village.coordinates || "-"}
+                </td>
+
+                <td>
+                    ${village.population.toLocaleString()}
+                </td>
+
+                <td>
+                    ${village.resources.wood.toLocaleString()}
+                </td>
+
+                <td>
+                    ${village.resources.clay.toLocaleString()}
+                </td>
+
+                <td>
+                    ${village.resources.iron.toLocaleString()}
+                </td>
+
+                <td>
+                    ${village.resources.crop.toLocaleString()}
+                </td>
+
+                <td>
+                    ${netCrop.toLocaleString()}/h
+                </td>
+
+                <td>
+
+                    <button
+                        onclick="editVillage(${village.id})">
+                        ✏️
+                    </button>
+
+                    <button
+                        onclick="deleteVillage(${village.id})">
+                        🗑️
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+
+    html += `
+            </tbody>
+        </table>
+    `;
+
+
+    container.innerHTML = html;
+
+    updateDashboard();
+
+    updateAI();
 }
 
-function updateAI(){
 
-const c=document.getElementById("aiAnalysis");
+// ========================================
+// BASIC AI ANALYSIS
+// ========================================
 
-if(!account.villages.length){
-c.textContent="הוסף נתוני כפר כדי לקבל ניתוח.";
-return;
+function updateAI() {
+
+    const container =
+        document.getElementById("aiAnalysis");
+
+
+    if (!container) return;
+
+
+    if (!account.villages.length) {
+
+        container.textContent =
+            "הוסף נתוני כפר כדי לקבל ניתוח.";
+
+        return;
+    }
+
+
+    const villages =
+        account.villages.map(village => ({
+
+            name: village.name,
+
+            netCrop:
+                village.production.crop -
+                village.cropConsumption,
+
+            population:
+                village.population,
+
+            troops:
+                Object.values(village.troops || {})
+                    .reduce(
+                        (sum, value) =>
+                            sum + Number(value),
+                        0
+                    )
+
+        }));
+
+
+    const strongest =
+        [...villages].sort(
+            (a, b) => b.troops - a.troops
+        )[0];
+
+
+    const lowestCrop =
+        [...villages].sort(
+            (a, b) => a.netCrop - b.netCrop
+        )[0];
+
+
+    container.innerHTML = `
+
+        <strong>ניתוח חשבון</strong>
+
+        <br><br>
+
+        🏰 כפרים:
+        <strong>${villages.length}</strong>
+
+        <br>
+
+        ⚔️ הכפר עם הצבא הגדול ביותר:
+        <strong>${strongest.name}</strong>
+        (${strongest.troops.toLocaleString()} חיילים)
+
+        <br>
+
+        🌾 הכפר עם היבול הנטו הנמוך ביותר:
+        <strong>${lowestCrop.name}</strong>
+        (${lowestCrop.netCrop.toLocaleString()}/שעה)
+
+    `;
 }
 
-let bestCrop=null;
-let lowestCrop=null;
 
-account.villages.forEach(v=>{
-const net=v.production.crop-v.cropConsumption;
+// ========================================
+// CLEAR FORM
+// ========================================
 
-if(!bestCrop||net>bestCrop.net)bestCrop={v,net};
-if(!lowestCrop||net<lowestCrop.net)lowestCrop={v,net};
-});
+function clearForm() {
 
-c.innerHTML=`
-<strong>ניתוח ראשוני</strong><br>
-כפר בעל יבול נטו הגבוה ביותר:
-<strong>${bestCrop.v.name}</strong> — ${bestCrop.net.toLocaleString()}/שעה<br>
-כפר בעל יבול נטו הנמוך ביותר:
-<strong>${lowestCrop.v.name}</strong> — ${lowestCrop.net.toLocaleString()}/שעה<br>
-סה"כ כפרים: ${account.villages.length}
-`;
+    editingVillageId = null;
+
+
+    document
+        .querySelectorAll("input, textarea")
+        .forEach(element => {
+
+            if (element.readOnly) return;
+
+            if (element.type === "number") {
+                element.value = 0;
+            } else {
+                element.value = "";
+            }
+
+        });
+
+
+    set("isCapital", "false");
+    set("heroHealth", 100);
 }
 
-function clearForm(){
 
-editingVillageId=null;
+// ========================================
+// EXPORT
+// ========================================
 
-ids.forEach(id=>{
-const e=document.getElementById(id);
-if(!e)return;
+function exportData() {
 
-if(e.type==="number")e.value=0;
-else if(e.tagName==="SELECT")e.value="false";
-else e.value="";
-});
+    const data =
+        JSON.stringify(account, null, 2);
 
-set("heroHealth",100);
+
+    const blob =
+        new Blob(
+            [data],
+            { type: "application/json" }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href = url;
+
+    link.download =
+        "travian-ai-account.json";
+
+
+    link.click();
+
+
+    URL.revokeObjectURL(url);
 }
 
-function exportData(){
 
-const blob=new Blob(
-[JSON.stringify(account,null,2)],
-{type:"application/json"}
+// ========================================
+// IMPORT
+// ========================================
+
+function importData(event) {
+
+    const file =
+        event.target.files[0];
+
+
+    if (!file) return;
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload = function(e) {
+
+        try {
+
+            const imported =
+                JSON.parse(e.target.result);
+
+
+            if (
+                !imported ||
+                !Array.isArray(imported.villages)
+            ) {
+                throw new Error();
+            }
+
+
+            account = imported;
+
+            saveAccount();
+
+            renderVillages();
+
+
+        } catch {
+
+            alert(
+                "קובץ הנתונים אינו תקין."
+            );
+
+        }
+
+    };
+
+
+    reader.readAsText(file);
+
+    event.target.value = "";
+}
+
+
+// ========================================
+// START
+// ========================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        renderVillages();
+
+    }
 );
-
-const url=URL.createObjectURL(blob);
-
-const a=document.createElement("a");
-a.href=url;
-a.download="travian-ai-account.json";
-a.click();
-
-URL.revokeObjectURL(url);
-}
-
-function importData(event){
-
-const file=event.target.files[0];
-
-if(!file)return;
-
-const reader=new FileReader();
-
-reader.onload=e=>{
-
-try{
-
-const data=JSON.parse(e.target.result);
-
-if(!data.villages||!Array.isArray(data.villages))
-throw new Error();
-
-account=data;
-
-saveAccount();
-renderVillages();
-
-alert("הנתונים נטענו בהצלחה.");
-
-}catch{
-
-alert("קובץ נתונים לא תקין.");
-
-}
-
-};
-
-reader.readAsText(file);
-}
-
-document.addEventListener("DOMContentLoaded",()=>{
-renderVillages();
-});
