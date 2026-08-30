@@ -1,7 +1,6 @@
 const ROMAN_TROOPS = {
     legionnaire: {
         name: "לגיונר",
-        type: "infantry",
         attack: 40,
         defenseInfantry: 35,
         defenseCavalry: 50,
@@ -10,7 +9,6 @@ const ROMAN_TROOPS = {
 
     praetorian: {
         name: "פרטוריאן",
-        type: "infantry",
         attack: 30,
         defenseInfantry: 65,
         defenseCavalry: 35,
@@ -19,7 +17,6 @@ const ROMAN_TROOPS = {
 
     imperian: {
         name: "אימפריאן",
-        type: "infantry",
         attack: 70,
         defenseInfantry: 40,
         defenseCavalry: 25,
@@ -28,7 +25,6 @@ const ROMAN_TROOPS = {
 
     equitesLegati: {
         name: "אקוויטס לגטי",
-        type: "cavalry",
         attack: 0,
         defenseInfantry: 20,
         defenseCavalry: 10,
@@ -37,7 +33,6 @@ const ROMAN_TROOPS = {
 
     equitesImperatoris: {
         name: "אקוויטס אימפרטוריס",
-        type: "cavalry",
         attack: 120,
         defenseInfantry: 65,
         defenseCavalry: 50,
@@ -46,7 +41,6 @@ const ROMAN_TROOPS = {
 
     equitesCaesaris: {
         name: "אקוויטס קיסריס",
-        type: "cavalry",
         attack: 180,
         defenseInfantry: 80,
         defenseCavalry: 105,
@@ -55,7 +49,6 @@ const ROMAN_TROOPS = {
 
     ram: {
         name: "איל ניגוח",
-        type: "siege",
         attack: 60,
         defenseInfantry: 30,
         defenseCavalry: 75,
@@ -63,8 +56,7 @@ const ROMAN_TROOPS = {
     },
 
     fireCatapult: {
-        name: "קטפולטת אש",
-        type: "siege",
+        name: "קטפולטה",
         attack: 75,
         defenseInfantry: 60,
         defenseCavalry: 10,
@@ -73,7 +65,6 @@ const ROMAN_TROOPS = {
 
     senator: {
         name: "סנאטור",
-        type: "conquest",
         attack: 50,
         defenseInfantry: 40,
         defenseCavalry: 30,
@@ -82,7 +73,6 @@ const ROMAN_TROOPS = {
 
     settler: {
         name: "מתיישב",
-        type: "expansion",
         attack: 0,
         defenseInfantry: 80,
         defenseCavalry: 80,
