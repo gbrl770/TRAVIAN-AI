@@ -2,12 +2,7 @@ const GAME_DATA = {
     tribe: "Romans",
     serverSpeed: 3,
 
-    resources: [
-        "wood",
-        "clay",
-        "iron",
-        "crop"
-    ],
+    resources: ["wood", "clay", "iron", "crop"],
 
     resourceFields: {
         wood: 6,
