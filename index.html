@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Travian AI</title>
+
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,166 +15,496 @@
 <header>
     <div class="header-inner">
         <h1>⚔️ Travian AI</h1>
-        <p>ניהול וניתוח חשבון Travian</p>
+        <p>מערכת ניהול, ניתוח ותכנון חשבון Travian</p>
     </div>
 </header>
 
 <main>
 
+<!-- DASHBOARD -->
+
 <section class="dashboard">
-    <div class="stat"><span>🏰 כפרים</span><strong id="villageCount">0</strong></div>
-    <div class="stat"><span>👥 אוכלוסייה</span><strong id="populationTotal">0</strong></div>
-    <div class="stat"><span>⚔️ חיילים</span><strong id="troopsTotal">0</strong></div>
-    <div class="stat"><span>🌾 יבול נטו</span><strong id="netCropTotal">0</strong></div>
+
+    <div class="stat">
+        <span>🏰 כפרים</span>
+        <strong id="villageCount">0</strong>
+    </div>
+
+    <div class="stat">
+        <span>👥 אוכלוסייה</span>
+        <strong id="populationTotal">0</strong>
+    </div>
+
+    <div class="stat">
+        <span>⚔️ חיילים</span>
+        <strong id="troopsTotal">0</strong>
+    </div>
+
+    <div class="stat">
+        <span>🌾 יבול נטו</span>
+        <strong id="netCropTotal">0</strong>
+    </div>
+
 </section>
 
+
+<!-- VILLAGE -->
+
 <section class="card">
+
 <h2>🏠 פרטי כפר</h2>
 
 <div class="grid">
-<div class="field"><label>שם</label><input id="villageName"></div>
-<div class="field"><label>קואורדינטות</label><input id="coordinates" placeholder="29|-27"></div>
-<div class="field"><label>אוכלוסייה</label><input id="population" type="number" min="0" value="0"></div>
-<div class="field"><label>בירה</label>
-<select id="isCapital"><option value="false">לא</option><option value="true">כן</option></select>
+
+<div class="field">
+<label>שם הכפר</label>
+<input id="villageName">
 </div>
+
+<div class="field">
+<label>קואורדינטות</label>
+<input id="coordinates" placeholder="29|-27">
 </div>
+
+<div class="field">
+<label>אוכלוסייה</label>
+<input id="population" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>בירה</label>
+
+<select id="isCapital">
+
+<option value="false">לא</option>
+<option value="true">כן</option>
+
+</select>
+
+</div>
+
+</div>
+
 </section>
 
+
+<!-- RESOURCES -->
+
 <section class="card">
+
 <h2>🌾 משאבים</h2>
+
 <div class="grid">
-<div class="field"><label>🪵 עץ</label><input id="wood" type="number" min="0" value="0"></div>
-<div class="field"><label>🧱 טיט</label><input id="clay" type="number" min="0" value="0"></div>
-<div class="field"><label>⛓️ ברזל</label><input id="iron" type="number" min="0" value="0"></div>
-<div class="field"><label>🌾 יבול</label><input id="crop" type="number" min="0" value="0"></div>
+
+<div class="field">
+<label>🪵 עץ</label>
+<input id="wood" type="number" min="0" value="0">
 </div>
+
+<div class="field">
+<label>🧱 טיט</label>
+<input id="clay" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>⛓️ ברזל</label>
+<input id="iron" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>🌾 יבול</label>
+<input id="crop" type="number" min="0" value="0">
+</div>
+
+</div>
+
 
 <h3>ייצור לשעה</h3>
+
 <div class="grid">
-<div class="field"><label>עץ</label><input id="woodProd" type="number" min="0" value="0"></div>
-<div class="field"><label>טיט</label><input id="clayProd" type="number" min="0" value="0"></div>
-<div class="field"><label>ברזל</label><input id="ironProd" type="number" min="0" value="0"></div>
-<div class="field"><label>יבול</label><input id="cropProd" type="number" min="0" value="0"></div>
+
+<div class="field">
+<label>עץ / שעה</label>
+<input id="woodProd" type="number" min="0" value="0">
 </div>
+
+<div class="field">
+<label>טיט / שעה</label>
+<input id="clayProd" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>ברזל / שעה</label>
+<input id="ironProd" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>יבול / שעה</label>
+<input id="cropProd" type="number" min="0" value="0">
+</div>
+
+</div>
+
 
 <h3>אחסון</h3>
+
 <div class="grid">
-<div class="field"><label>מחסן</label><input id="warehouse" type="number" min="0" value="0"></div>
-<div class="field"><label>אסם</label><input id="granary" type="number" min="0" value="0"></div>
-<div class="field"><label>צריכת יבול</label><input id="cropConsumption" type="number" min="0" value="0"></div>
+
+<div class="field">
+<label>מחסן</label>
+<input id="warehouse" type="number" min="0" value="0">
 </div>
+
+<div class="field">
+<label>אסם</label>
+<input id="granary" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>צריכת יבול</label>
+<input id="cropConsumption" type="number" min="0" value="0">
+</div>
+
+</div>
+
 </section>
 
+
+<!-- RESOURCE FIELDS -->
+
 <section class="card">
+
 <h2>🌲 שדות משאבים</h2>
 
 <div class="field">
-<label>רמות השדות לפי הסדר במשחק</label>
-<textarea id="resourceFields" rows="3"
-placeholder="עץ: 10,10,9,9,8,8 | טיט: 10,10,9,9,8,8 | ברזל: 10,10,9,9,8,8 | יבול: 8,8,8,8,8,8"></textarea>
+
+<label>רמות השדות</label>
+
+<textarea
+id="resourceFields"
+rows="4"
+placeholder="wood: 10,10,9,9,8,8 | clay: 10,10,9,9,8,8 | iron: 10,10,9,9,8,8 | crop: 8,8,8,8,8,8">
+</textarea>
+
 </div>
+
 </section>
 
+
+<!-- BUILDINGS -->
+
 <section class="card">
+
 <h2>🏗️ מבנים</h2>
 
 <div class="grid">
-<div class="field"><label>בניין מרכזי</label><input id="mainBuilding" type="number" min="0" value="0"></div>
-<div class="field"><label>מגורים מלכותיים</label><input id="residence" type="number" min="0" value="0"></div>
-<div class="field"><label>ארמון</label><input id="palace" type="number" min="0" value="0"></div>
-<div class="field"><label>אחוזת גיבור</label><input id="heroMansion" type="number" min="0" value="0"></div>
-<div class="field"><label>מחסן</label><input id="warehouseBuilding" type="number" min="0" value="0"></div>
-<div class="field"><label>אסם</label><input id="granaryBuilding" type="number" min="0" value="0"></div>
-<div class="field"><label>קסרקטין</label><input id="barracks" type="number" min="0" value="0"></div>
-<div class="field"><label>אורווה</label><input id="stable" type="number" min="0" value="0"></div>
-<div class="field"><label>סדנה</label><input id="workshop" type="number" min="0" value="0"></div>
-<div class="field"><label>אקדמיה</label><input id="academy" type="number" min="0" value="0"></div>
-<div class="field"><label>נפחייה</label><input id="smithy" type="number" min="0" value="0"></div>
-<div class="field"><label>שוק</label><input id="market" type="number" min="0" value="0"></div>
-<div class="field"><label>נקודת מפגש</label><input id="rallyPoint" type="number" min="0" value="0"></div>
-<div class="field"><label>חומת עיר</label><input id="cityWall" type="number" min="0" value="0"></div>
+
+<div class="field">
+<label>בניין מרכזי</label>
+<input id="mainBuilding" type="number" min="0" value="0">
 </div>
+
+<div class="field">
+<label>מחסן</label>
+<input id="warehouseBuilding" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>אסם</label>
+<input id="granaryBuilding" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>מגורים מלכותיים</label>
+<input id="residence" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>ארמון</label>
+<input id="palace" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>אחוזת גיבור</label>
+<input id="heroMansion" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>קסרקטין</label>
+<input id="barracks" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>אורווה</label>
+<input id="stable" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>סדנה</label>
+<input id="workshop" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>אקדמיה</label>
+<input id="academy" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>נפחייה</label>
+<input id="smithy" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>שוק</label>
+<input id="market" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>נקודת מפגש</label>
+<input id="rallyPoint" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>חומת העיר</label>
+<input id="cityWall" type="number" min="0" value="0">
+</div>
+
+</div>
+
 </section>
 
+
+<!-- TROOPS -->
+
 <section class="card">
+
 <h2>⚔️ צבא רומאי</h2>
 
 <div class="grid">
-<div class="field"><label>לגיונר</label><input id="legionnaire" type="number" min="0" value="0"></div>
-<div class="field"><label>פרטוריאן</label><input id="praetorian" type="number" min="0" value="0"></div>
-<div class="field"><label>אימפריאן</label><input id="imperian" type="number" min="0" value="0"></div>
-<div class="field"><label>Equites Legati</label><input id="equitesLegati" type="number" min="0" value="0"></div>
-<div class="field"><label>Equites Imperatoris</label><input id="equitesImperatoris" type="number" min="0" value="0"></div>
-<div class="field"><label>Equites Caesaris</label><input id="equitesCaesaris" type="number" min="0" value="0"></div>
-<div class="field"><label>איל ניגוח</label><input id="ram" type="number" min="0" value="0"></div>
-<div class="field"><label>קטפולטה</label><input id="fireCatapult" type="number" min="0" value="0"></div>
-<div class="field"><label>סנאטור</label><input id="senator" type="number" min="0" value="0"></div>
-<div class="field"><label>מתיישב</label><input id="settler" type="number" min="0" value="0"></div>
+
+<div class="field">
+<label>לגיונר</label>
+<input id="legionnaire" type="number" min="0" value="0">
 </div>
+
+<div class="field">
+<label>פרטוריאן</label>
+<input id="praetorian" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>אימפריאן</label>
+<input id="imperian" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>Equites Legati</label>
+<input id="equitesLegati" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>Equites Imperatoris</label>
+<input id="equitesImperatoris" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>Equites Caesaris</label>
+<input id="equitesCaesaris" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>איל ניגוח</label>
+<input id="ram" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>קטפולטה</label>
+<input id="fireCatapult" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>סנאטור</label>
+<input id="senator" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>מתיישב</label>
+<input id="settler" type="number" min="0" value="0">
+</div>
+
+</div>
+
 </section>
 
+
+<!-- HERO -->
+
 <section class="card">
+
 <h2>🦸 גיבור</h2>
 
 <div class="grid">
-<div class="field"><label>רמה</label><input id="heroLevel" type="number" min="0" value="0"></div>
-<div class="field"><label>ניסיון</label><input id="heroXP" type="number" min="0" value="0"></div>
-<div class="field"><label>חיים %</label><input id="heroHealth" type="number" min="0" max="100" value="100"></div>
+
+<div class="field">
+<label>רמה</label>
+<input id="heroLevel" type="number" min="0" value="0">
 </div>
+
+<div class="field">
+<label>ניסיון</label>
+<input id="heroXP" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>חיים %</label>
+<input id="heroHealth" type="number" min="0" max="100" value="100">
+</div>
+
+</div>
+
 </section>
 
+
+<!-- OASIS -->
+
 <section class="card">
+
 <h2>🏝️ נאות מדבר</h2>
 
 <div class="grid">
-<div class="field"><label>מספר נאות</label><input id="oasisCount" type="number" min="0" value="0"></div>
-<div class="field"><label>בונוס עץ %</label><input id="oasisWood" type="number" min="0" value="0"></div>
-<div class="field"><label>בונוס טיט %</label><input id="oasisClay" type="number" min="0" value="0"></div>
-<div class="field"><label>בונוס ברזל %</label><input id="oasisIron" type="number" min="0" value="0"></div>
-<div class="field"><label>בונוס יבול %</label><input id="oasisCrop" type="number" min="0" value="0"></div>
+
+<div class="field">
+<label>מספר נאות</label>
+<input id="oasisCount" type="number" min="0" value="0">
 </div>
+
+<div class="field">
+<label>בונוס עץ %</label>
+<input id="oasisWood" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>בונוס טיט %</label>
+<input id="oasisClay" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>בונוס ברזל %</label>
+<input id="oasisIron" type="number" min="0" value="0">
+</div>
+
+<div class="field">
+<label>בונוס יבול %</label>
+<input id="oasisCrop" type="number" min="0" value="0">
+</div>
+
+</div>
+
 </section>
 
+
+<!-- QUEUES -->
+
 <section class="card">
+
 <h2>⏱️ תורים</h2>
 
 <div class="grid">
-<div class="field"><label>בנייה</label><input id="buildingQueue" placeholder="לדוגמה: מחסן 15"></div>
-<div class="field"><label>שדה משאב</label><input id="fieldQueue" placeholder="לדוגמה: עץ 11"></div>
-<div class="field"><label>קסרקטין</label><input id="barracksQueue" placeholder="לדוגמה: 100 לגיונרים"></div>
-<div class="field"><label>אורווה</label><input id="stableQueue"></div>
+
+<div class="field">
+<label>תור בנייה</label>
+<input id="buildingQueue">
 </div>
-</section>
 
-<section class="card">
-<h2>🏰 הכפרים שלי</h2>
-<div id="villagesContainer"></div>
-</section>
-
-<section class="card">
-<h2>🧠 ניתוח AI</h2>
-<div id="aiAnalysis" class="analysis">
-הוסף נתוני כפר כדי לקבל ניתוח.
+<div class="field">
+<label>תור שדות</label>
+<input id="fieldQueue">
 </div>
+
+<div class="field">
+<label>תור קסרקטין</label>
+<input id="barracksQueue">
+</div>
+
+<div class="field">
+<label>תור אורווה</label>
+<input id="stableQueue">
+</div>
+
+</div>
+
 </section>
 
+
+<!-- ACTIONS -->
+
 <section class="card">
-<h2>💾 נתונים</h2>
+
+<h2>⚙️ פעולות</h2>
+
 <div class="button-row">
-<button onclick="saveVillage()">💾 שמור כפר</button>
-<button onclick="clearForm()">🧹 נקה</button>
-<button onclick="exportData()">📤 ייצוא</button>
-<button onclick="document.getElementById('importFile').click()">📥 ייבוא</button>
-<input id="importFile" type="file" accept=".json" hidden onchange="importData(event)">
+
+<button onclick="saveVillage()">
+💾 שמור כפר
+</button>
+
+<button onclick="clearForm()">
+🧹 נקה טופס
+</button>
+
+<button onclick="exportData()">
+📤 ייצא חשבון
+</button>
+
+<button onclick="document.getElementById('importFile').click()">
+📥 ייבא חשבון
+</button>
+
+<input
+id="importFile"
+type="file"
+accept=".json"
+hidden
+onchange="importData(event)">
+
 </div>
+
 </section>
+
+
+<!-- VILLAGES -->
+
+<section class="card">
+
+<h2>🏰 הכפרים שלי</h2>
+
+<div id="villagesContainer"></div>
+
+</section>
+
+
+<!-- AI -->
+
+<section class="card">
+
+<h2>🧠 Travian AI</h2>
+
+<div id="aiAnalysis" class="analysis">
+
+הוסף נתוני כפרים כדי לקבל ניתוח.
+
+</div>
+
+</section>
+
 
 </main>
+
 
 <script src="data/game-data.js"></script>
 <script src="data/troops.js"></script>
 <script src="data/buildings.js"></script>
 <script src="app.js"></script>
+
 </body>
 </html>
