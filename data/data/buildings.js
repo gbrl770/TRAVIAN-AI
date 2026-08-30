@@ -1,7 +1,7 @@
 const BUILDINGS = {
     mainBuilding: "בניין מרכזי",
-    warehouse: "מחסן",
-    granary: "אסם",
+    warehouseBuilding: "מחסן",
+    granaryBuilding: "אסם",
     residence: "מגורים מלכותיים",
     palace: "ארמון",
     heroMansion: "אחוזת גיבור",
