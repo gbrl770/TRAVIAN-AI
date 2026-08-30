@@ -361,45 +361,12 @@ function deleteVillage(id) {
 
 function updateDashboard() {
 
-    let population = 0;
-    let troops = 0;
-    let netCrop = 0;
+    const summary = TRAVIAN_CALCULATOR.getAccountSummary(account);
 
-
-    account.villages.forEach(village => {
-
-        population += village.population;
-
-
-        Object.values(village.troops || {})
-            .forEach(amount => {
-                troops += Number(amount) || 0;
-            });
-
-
-        netCrop +=
-            village.production.crop -
-            village.cropConsumption;
-
-    });
-
-
-    set("villageCount", account.villages.length);
-
-    set(
-        "populationTotal",
-        population.toLocaleString()
-    );
-
-    set(
-        "troopsTotal",
-        troops.toLocaleString()
-    );
-
-    set(
-        "netCropTotal",
-        netCrop.toLocaleString()
-    );
+    set("villageCount", summary.villages);
+    set("populationTotal", summary.population.toLocaleString());
+    set("troopsTotal", summary.troops.toLocaleString());
+    set("netCropTotal", summary.netCrop.toLocaleString());
 }
 
 
