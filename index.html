@@ -1,230 +1,28 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Travian AI</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f1f3f5;
-            color: #1f2937;
-        }
-
-        /* HEADER */
-
-        header {
-            background: #20252b;
-            color: white;
-            padding: 25px 30px;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .subtitle {
-            color: #cbd5e1;
-            margin-top: 5px;
-            font-size: 14px;
-        }
-
-        .online {
-            background: #166534;
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-        }
-
-        /* MAIN */
-
-        main {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        /* TOP CARDS */
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .stat {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-
-        .stat-title {
-            color: #6b7280;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        .stat-value {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        /* CARD */
-
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-
-        .card h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-
-        /* FORM */
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-        }
-
-        label {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        input {
-            padding: 11px;
-            border: 1px solid #d1d5db;
-            border-radius: 7px;
-            font-size: 15px;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #2563eb;
-        }
-
-        /* BUTTONS */
-
-        .buttons {
-            margin-top: 25px;
-            display: flex;
-            gap: 10px;
-        }
-
-        button {
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 15px;
-            cursor: pointer;
-            background: #2563eb;
-            color: white;
-        }
-
-        button:hover {
-            opacity: 0.9;
-        }
-
-        .secondary {
-            background: #6b7280;
-        }
-
-        /* VILLAGE TABLE */
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #e5e7eb;
-            text-align: right;
-        }
-
-        th {
-            background: #f8fafc;
-        }
-
-        /* AI */
-
-        .ai-box {
-            background: #f8fafc;
-            border-right: 5px solid #2563eb;
-            padding: 20px;
-            border-radius: 8px;
-            line-height: 1.7;
-        }
-
-        .empty {
-            color: #6b7280;
-            text-align: center;
-            padding: 25px;
-        }
-
-        /* MOBILE */
-
-        @media (max-width: 800px) {
-
-            .dashboard {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header-content {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <header>
 
-    <div class="header-content">
+    <div class="header-inner">
 
-        <div>
-            <div class="logo">⚔️ Travian AI</div>
-            <div class="subtitle">
-                מערכת חכמה לניהול וניתוח חשבון
-            </div>
-        </div>
+        <h1>⚔️ Travian AI</h1>
 
-        <div class="online">
+        <p>
+            מערכת חכמה לניהול וניתוח חשבון Travian
+        </p>
+
+        <div class="status">
             🟢 מערכת פעילה
         </div>
 
@@ -235,224 +33,456 @@
 
 <main>
 
+    <!-- ============================= -->
     <!-- DASHBOARD -->
-
-    <section class="dashboard">
-
-        <div class="stat">
-            <div class="stat-title">🏰 כפרים</div>
-            <div class="stat-value" id="villageCount">0</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-title">👥 אוכלוסייה</div>
-            <div class="stat-value" id="populationTotal">0</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-title">⚔️ חיילים</div>
-            <div class="stat-value" id="troopsTotal">0</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-title">🧠 מצב AI</div>
-            <div class="stat-value">מוכן</div>
-        </div>
-
-    </section>
-
-
-    <!-- ADD VILLAGE -->
+    <!-- ============================= -->
 
     <section class="card">
 
-        <h2>🏠 הוספת כפר</h2>
+        <h2>📊 תמונת מצב</h2>
 
-        <div class="form-grid">
+        <div class="grid">
 
-            <label>
-                שם הכפר
+            <div class="field">
+                <label>🏰 מספר כפרים</label>
                 <input
+                    id="villageCount"
                     type="text"
-                    id="villageName"
-                    placeholder="לדוגמה: Gabriel"
-                >
-            </label>
-
-            <label>
-                קואורדינטות
-                <input
-                    type="text"
-                    id="coordinates"
-                    placeholder="32|-174"
-                >
-            </label>
-
-            <label>
-                אוכלוסייה
-                <input
-                    type="number"
-                    id="population"
                     value="0"
+                    readonly
                 >
-            </label>
+            </div>
+
+            <div class="field">
+                <label>👥 אוכלוסייה</label>
+                <input
+                    id="populationTotal"
+                    type="text"
+                    value="0"
+                    readonly
+                >
+            </div>
+
+            <div class="field">
+                <label>⚔️ סך חיילים</label>
+                <input
+                    id="troopsTotal"
+                    type="text"
+                    value="0"
+                    readonly
+                >
+            </div>
+
+            <div class="field">
+                <label>🧠 AI</label>
+                <input
+                    type="text"
+                    value="מוכן"
+                    readonly
+                >
+            </div>
 
         </div>
 
     </section>
 
 
+    <!-- ============================= -->
+    <!-- VILLAGE -->
+    <!-- ============================= -->
+
+    <section class="card">
+
+        <h2>🏠 פרטי הכפר</h2>
+
+        <div class="grid">
+
+            <div class="field">
+                <label for="villageName">
+                    שם הכפר
+                </label>
+
+                <input
+                    id="villageName"
+                    type="text"
+                    placeholder="לדוגמה: Gabriel"
+                >
+            </div>
+
+
+            <div class="field">
+
+                <label for="coordinates">
+                    קואורדינטות
+                </label>
+
+                <input
+                    id="coordinates"
+                    type="text"
+                    placeholder="32|-174"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="population">
+                    אוכלוסייה
+                </label>
+
+                <input
+                    id="population"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ============================= -->
     <!-- RESOURCES -->
+    <!-- ============================= -->
 
     <section class="card">
 
         <h2>🌾 משאבים</h2>
 
-        <div class="form-grid">
+        <div class="grid">
 
-            <label>
-                🪵 עץ
-                <input type="number" id="wood" value="0">
-            </label>
+            <div class="field">
+                <label for="wood">
+                    🪵 עץ
+                </label>
 
-            <label>
-                🧱 טיט
-                <input type="number" id="clay" value="0">
-            </label>
+                <input
+                    id="wood"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+            </div>
 
-            <label>
-                ⛓️ ברזל
-                <input type="number" id="iron" value="0">
-            </label>
 
-            <label>
-                🌾 יבול
-                <input type="number" id="crop" value="0">
-            </label>
+            <div class="field">
+                <label for="clay">
+                    🧱 טיט
+                </label>
+
+                <input
+                    id="clay"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+            </div>
+
+
+            <div class="field">
+                <label for="iron">
+                    ⛓️ ברזל
+                </label>
+
+                <input
+                    id="iron"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+            </div>
+
+
+            <div class="field">
+                <label for="crop">
+                    🌾 יבול
+                </label>
+
+                <input
+                    id="crop"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+            </div>
 
         </div>
 
     </section>
 
 
+    <!-- ============================= -->
     <!-- PRODUCTION -->
+    <!-- ============================= -->
 
     <section class="card">
 
         <h2>📈 ייצור לשעה</h2>
 
-        <div class="form-grid">
+        <div class="grid">
 
-            <label>
-                🪵 עץ / שעה
-                <input type="number" id="woodProd" value="0">
-            </label>
+            <div class="field">
+                <label for="woodProd">
+                    🪵 עץ / שעה
+                </label>
 
-            <label>
-                🧱 טיט / שעה
-                <input type="number" id="clayProd" value="0">
-            </label>
+                <input
+                    id="woodProd"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+            </div>
 
-            <label>
-                ⛓️ ברזל / שעה
-                <input type="number" id="ironProd" value="0">
-            </label>
 
-            <label>
-                🌾 יבול / שעה
-                <input type="number" id="cropProd" value="0">
-            </label>
+            <div class="field">
+                <label for="clayProd">
+                    🧱 טיט / שעה
+                </label>
+
+                <input
+                    id="clayProd"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+            </div>
+
+
+            <div class="field">
+                <label for="ironProd">
+                    ⛓️ ברזל / שעה
+                </label>
+
+                <input
+                    id="ironProd"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+            </div>
+
+
+            <div class="field">
+                <label for="cropProd">
+                    🌾 יבול / שעה
+                </label>
+
+                <input
+                    id="cropProd"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+            </div>
 
         </div>
 
     </section>
 
 
+    <!-- ============================= -->
     <!-- TROOPS -->
+    <!-- ============================= -->
 
     <section class="card">
 
         <h2>⚔️ צבא</h2>
 
-        <div class="form-grid">
+        <div class="grid">
 
-            <label>
-                לגיונרים
-                <input type="number" id="legionnaire" value="0">
-            </label>
+            <div class="field">
 
-            <label>
-                פרטוריאנים
-                <input type="number" id="praetorian" value="0">
-            </label>
+                <label for="legionnaire">
+                    לגיונרים
+                </label>
 
-            <label>
-                אימפריאנים
-                <input type="number" id="imperian" value="0">
-            </label>
+                <input
+                    id="legionnaire"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
 
-            <label>
-                אימפרטוריס
-                <input type="number" id="imperatoris" value="0">
-            </label>
+            </div>
+
+
+            <div class="field">
+
+                <label for="praetorian">
+                    פרטוריאנים
+                </label>
+
+                <input
+                    id="praetorian"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="imperian">
+                    אימפריאנים
+                </label>
+
+                <input
+                    id="imperian"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="imperatoris">
+                    אימפרטוריס
+                </label>
+
+                <input
+                    id="imperatoris"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </div>
 
         </div>
 
     </section>
 
 
+    <!-- ============================= -->
     <!-- BUILDINGS -->
+    <!-- ============================= -->
 
     <section class="card">
 
         <h2>🏗️ מבנים</h2>
 
-        <div class="form-grid">
+        <div class="grid">
 
-            <label>
-                בניין מרכזי
-                <input type="number" id="mainBuilding" value="0">
-            </label>
+            <div class="field">
 
-            <label>
-                מגורים מלכותיים
-                <input type="number" id="residence" value="0">
-            </label>
+                <label for="mainBuilding">
+                    בניין מרכזי
+                </label>
 
-            <label>
-                אחוזת גיבור
-                <input type="number" id="heroMansion" value="0">
-            </label>
+                <input
+                    id="mainBuilding"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
 
-            <label>
-                קסרקטין
-                <input type="number" id="barracks" value="0">
-            </label>
+            </div>
 
-            <label>
-                אורווה
-                <input type="number" id="stable" value="0">
-            </label>
 
-            <label>
-                שוק
-                <input type="number" id="market" value="0">
-            </label>
+            <div class="field">
+
+                <label for="residence">
+                    מגורים מלכותיים
+                </label>
+
+                <input
+                    id="residence"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="heroMansion">
+                    אחוזת גיבור
+                </label>
+
+                <input
+                    id="heroMansion"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="barracks">
+                    קסרקטין
+                </label>
+
+                <input
+                    id="barracks"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="stable">
+                    אורווה
+                </label>
+
+                <input
+                    id="stable"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="market">
+                    שוק
+                </label>
+
+                <input
+                    id="market"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </div>
 
         </div>
 
 
-        <div class="buttons">
+        <div class="button-row">
 
             <button onclick="saveVillage()">
                 💾 שמור כפר
             </button>
 
+
             <button
-                class="secondary"
                 onclick="clearForm()"
+                class="secondary"
             >
-                🗑️ נקה טופס
+                🗑️ נקה
             </button>
 
         </div>
@@ -460,7 +490,9 @@
     </section>
 
 
-    <!-- VILLAGES -->
+    <!-- ============================= -->
+    <!-- SAVED VILLAGES -->
+    <!-- ============================= -->
 
     <section class="card">
 
@@ -477,7 +509,9 @@
     </section>
 
 
+    <!-- ============================= -->
     <!-- AI -->
+    <!-- ============================= -->
 
     <section class="card">
 
@@ -485,17 +519,18 @@
 
         <div class="ai-box">
 
-            <strong>מנוע הניתוח מוכן.</strong>
+            <strong>
+                מנוע הניתוח מוכן.
+            </strong>
 
             <p>
-                לאחר שנוסיף כפרים ונתונים,
-                המערכת תוכל לנתח את מצב החשבון
-                ולהמליץ על סדר הפעולות האופטימלי.
+                כרגע המערכת שומרת ומרכזת את נתוני הכפרים שלך.
             </p>
 
             <p>
-                בשלב הבא נוסיף מנגנון חישוב אמיתי
-                שיבדוק משאבים, ייצור, צבא ומבנים.
+                בשלב הבא נתחיל להכניס לוגיקה אמיתית:
+                חישוב משאבים, יבול, צבא,
+                עלויות וזמני בנייה.
             </p>
 
         </div>
@@ -505,295 +540,10 @@
 </main>
 
 
-<script>
+<!-- JavaScript -->
 
-    let villages = JSON.parse(
-        localStorage.getItem("travianVillages")
-    ) || [];
-
-
-    function getValue(id) {
-
-        return document.getElementById(id).value;
-
-    }
-
-
-    function saveVillage() {
-
-        const village = {
-
-            name: getValue("villageName"),
-
-            coordinates: getValue("coordinates"),
-
-            population: Number(
-                getValue("population")
-            ),
-
-            resources: {
-
-                wood: Number(getValue("wood")),
-
-                clay: Number(getValue("clay")),
-
-                iron: Number(getValue("iron")),
-
-                crop: Number(getValue("crop"))
-
-            },
-
-            production: {
-
-                wood: Number(getValue("woodProd")),
-
-                clay: Number(getValue("clayProd")),
-
-                iron: Number(getValue("ironProd")),
-
-                crop: Number(getValue("cropProd"))
-
-            },
-
-            troops: {
-
-                legionnaire: Number(
-                    getValue("legionnaire")
-                ),
-
-                praetorian: Number(
-                    getValue("praetorian")
-                ),
-
-                imperian: Number(
-                    getValue("imperian")
-                ),
-
-                imperatoris: Number(
-                    getValue("imperatoris")
-                )
-
-            },
-
-            buildings: {
-
-                mainBuilding: Number(
-                    getValue("mainBuilding")
-                ),
-
-                residence: Number(
-                    getValue("residence")
-                ),
-
-                heroMansion: Number(
-                    getValue("heroMansion")
-                ),
-
-                barracks: Number(
-                    getValue("barracks")
-                ),
-
-                stable: Number(
-                    getValue("stable")
-                ),
-
-                market: Number(
-                    getValue("market")
-                )
-
-            }
-
-        };
-
-
-        if (!village.name) {
-
-            alert("נא להזין שם כפר.");
-
-            return;
-
-        }
-
-
-        villages.push(village);
-
-
-        localStorage.setItem(
-            "travianVillages",
-            JSON.stringify(villages)
-        );
-
-
-        renderVillages();
-
-        clearForm();
-
-    }
-
-
-    function renderVillages() {
-
-        const container =
-            document.getElementById(
-                "villagesContainer"
-            );
-
-
-        if (villages.length === 0) {
-
-            container.innerHTML =
-                '<div class="empty">עדיין לא הוספת כפרים.</div>';
-
-            updateStats();
-
-            return;
-
-        }
-
-
-        let html = `
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>כפר</th>
-
-                        <th>קואורדינטות</th>
-
-                        <th>אוכלוסייה</th>
-
-                        <th>עץ</th>
-
-                        <th>טיט</th>
-
-                        <th>ברזל</th>
-
-                        <th>יבול</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-        `;
-
-
-        villages.forEach(village => {
-
-            html += `
-
-                <tr>
-
-                    <td>${village.name}</td>
-
-                    <td>${village.coordinates}</td>
-
-                    <td>${village.population.toLocaleString()}</td>
-
-                    <td>${village.resources.wood.toLocaleString()}</td>
-
-                    <td>${village.resources.clay.toLocaleString()}</td>
-
-                    <td>${village.resources.iron.toLocaleString()}</td>
-
-                    <td>${village.resources.crop.toLocaleString()}</td>
-
-                </tr>
-
-            `;
-
-        });
-
-
-        html += `
-
-                </tbody>
-
-            </table>
-
-        `;
-
-
-        container.innerHTML = html;
-
-
-        updateStats();
-
-    }
-
-
-    function updateStats() {
-
-        let population = 0;
-
-        let troops = 0;
-
-
-        villages.forEach(village => {
-
-            population += village.population;
-
-
-            troops +=
-                village.troops.legionnaire +
-                village.troops.praetorian +
-                village.troops.imperian +
-                village.troops.imperatoris;
-
-        });
-
-
-        document.getElementById(
-            "villageCount"
-        ).textContent = villages.length;
-
-
-        document.getElementById(
-            "populationTotal"
-        ).textContent =
-            population.toLocaleString();
-
-
-        document.getElementById(
-            "troopsTotal"
-        ).textContent =
-            troops.toLocaleString();
-
-    }
-
-
-    function clearForm() {
-
-        const inputs =
-            document.querySelectorAll(
-                "input"
-            );
-
-
-        inputs.forEach(input => {
-
-            if (input.type === "number") {
-
-                input.value = 0;
-
-            } else {
-
-                input.value = "";
-
-            }
-
-        });
-
-    }
-
-
-    renderVillages();
-
-</script>
+<script src="app.js"></script>
 
 </body>
+
 </html>
