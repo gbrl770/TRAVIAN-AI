@@ -13,29 +13,16 @@
 <body>
 
 <header>
-
     <div class="header-inner">
-
         <h1>⚔️ Travian AI</h1>
-
-        <p>
-            מערכת חכמה לניהול וניתוח חשבון Travian
-        </p>
-
-        <div class="status">
-            🟢 מערכת פעילה
-        </div>
-
+        <p>מערכת חכמה לניהול וניתוח חשבון Travian</p>
+        <div class="status">🟢 מערכת פעילה</div>
     </div>
-
 </header>
-
 
 <main>
 
-    <!-- ============================= -->
     <!-- DASHBOARD -->
-    <!-- ============================= -->
 
     <section class="card">
 
@@ -44,42 +31,23 @@
         <div class="grid">
 
             <div class="field">
-                <label>🏰 מספר כפרים</label>
-                <input
-                    id="villageCount"
-                    type="text"
-                    value="0"
-                    readonly
-                >
+                <label>🏰 כפרים</label>
+                <input id="villageCount" value="0" readonly>
             </div>
 
             <div class="field">
                 <label>👥 אוכלוסייה</label>
-                <input
-                    id="populationTotal"
-                    type="text"
-                    value="0"
-                    readonly
-                >
+                <input id="populationTotal" value="0" readonly>
             </div>
 
             <div class="field">
-                <label>⚔️ סך חיילים</label>
-                <input
-                    id="troopsTotal"
-                    type="text"
-                    value="0"
-                    readonly
-                >
+                <label>⚔️ חיילים</label>
+                <input id="troopsTotal" value="0" readonly>
             </div>
 
             <div class="field">
-                <label>🧠 AI</label>
-                <input
-                    type="text"
-                    value="מוכן"
-                    readonly
-                >
+                <label>🌍 מהירות שרת</label>
+                <input value="3×" readonly>
             </div>
 
         </div>
@@ -87,9 +55,7 @@
     </section>
 
 
-    <!-- ============================= -->
     <!-- VILLAGE -->
-    <!-- ============================= -->
 
     <section class="card">
 
@@ -98,45 +64,27 @@
         <div class="grid">
 
             <div class="field">
-                <label for="villageName">
-                    שם הכפר
-                </label>
-
-                <input
-                    id="villageName"
-                    type="text"
-                    placeholder="לדוגמה: Gabriel"
-                >
+                <label>שם הכפר</label>
+                <input id="villageName" placeholder="לדוגמה: Gabriel">
             </div>
 
-
             <div class="field">
-
-                <label for="coordinates">
-                    קואורדינטות
-                </label>
-
-                <input
-                    id="coordinates"
-                    type="text"
-                    placeholder="32|-174"
-                >
-
+                <label>קואורדינטות</label>
+                <input id="coordinates" placeholder="32|-174">
             </div>
 
+            <div class="field">
+                <label>אוכלוסייה</label>
+                <input id="population" type="number" min="0" value="0">
+            </div>
 
             <div class="field">
+                <label>בירה?</label>
 
-                <label for="population">
-                    אוכלוסייה
-                </label>
-
-                <input
-                    id="population"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
+                <select id="isCapital">
+                    <option value="false">לא</option>
+                    <option value="true">כן</option>
+                </select>
 
             </div>
 
@@ -145,9 +93,7 @@
     </section>
 
 
-    <!-- ============================= -->
     <!-- RESOURCES -->
-    <!-- ============================= -->
 
     <section class="card">
 
@@ -156,58 +102,23 @@
         <div class="grid">
 
             <div class="field">
-                <label for="wood">
-                    🪵 עץ
-                </label>
-
-                <input
-                    id="wood"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
+                <label>🪵 עץ</label>
+                <input id="wood" type="number" min="0" value="0">
             </div>
 
-
             <div class="field">
-                <label for="clay">
-                    🧱 טיט
-                </label>
-
-                <input
-                    id="clay"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
+                <label>🧱 טיט</label>
+                <input id="clay" type="number" min="0" value="0">
             </div>
 
-
             <div class="field">
-                <label for="iron">
-                    ⛓️ ברזל
-                </label>
-
-                <input
-                    id="iron"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
+                <label>⛓️ ברזל</label>
+                <input id="iron" type="number" min="0" value="0">
             </div>
 
-
             <div class="field">
-                <label for="crop">
-                    🌾 יבול
-                </label>
-
-                <input
-                    id="crop"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
+                <label>🌾 יבול</label>
+                <input id="crop" type="number" min="0" value="0">
             </div>
 
         </div>
@@ -215,9 +126,7 @@
     </section>
 
 
-    <!-- ============================= -->
     <!-- PRODUCTION -->
-    <!-- ============================= -->
 
     <section class="card">
 
@@ -226,58 +135,23 @@
         <div class="grid">
 
             <div class="field">
-                <label for="woodProd">
-                    🪵 עץ / שעה
-                </label>
-
-                <input
-                    id="woodProd"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
+                <label>🪵 עץ / שעה</label>
+                <input id="woodProd" type="number" min="0" value="0">
             </div>
 
-
             <div class="field">
-                <label for="clayProd">
-                    🧱 טיט / שעה
-                </label>
-
-                <input
-                    id="clayProd"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
+                <label>🧱 טיט / שעה</label>
+                <input id="clayProd" type="number" min="0" value="0">
             </div>
 
-
             <div class="field">
-                <label for="ironProd">
-                    ⛓️ ברזל / שעה
-                </label>
-
-                <input
-                    id="ironProd"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
+                <label>⛓️ ברזל / שעה</label>
+                <input id="ironProd" type="number" min="0" value="0">
             </div>
 
-
             <div class="field">
-                <label for="cropProd">
-                    🌾 יבול / שעה
-                </label>
-
-                <input
-                    id="cropProd"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
+                <label>🌾 יבול / שעה</label>
+                <input id="cropProd" type="number" min="0" value="0">
             </div>
 
         </div>
@@ -285,77 +159,27 @@
     </section>
 
 
-    <!-- ============================= -->
-    <!-- TROOPS -->
-    <!-- ============================= -->
+    <!-- STORAGE -->
 
     <section class="card">
 
-        <h2>⚔️ צבא</h2>
+        <h2>📦 אחסון ויבול</h2>
 
         <div class="grid">
 
             <div class="field">
-
-                <label for="legionnaire">
-                    לגיונרים
-                </label>
-
-                <input
-                    id="legionnaire"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
-
+                <label>מחסן</label>
+                <input id="warehouse" type="number" min="0" value="0">
             </div>
 
-
             <div class="field">
-
-                <label for="praetorian">
-                    פרטוריאנים
-                </label>
-
-                <input
-                    id="praetorian"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
-
+                <label>אסם</label>
+                <input id="granary" type="number" min="0" value="0">
             </div>
 
-
             <div class="field">
-
-                <label for="imperian">
-                    אימפריאנים
-                </label>
-
-                <input
-                    id="imperian"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
-
-            </div>
-
-
-            <div class="field">
-
-                <label for="imperatoris">
-                    אימפרטוריס
-                </label>
-
-                <input
-                    id="imperatoris"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
-
+                <label>צריכת יבול / שעה</label>
+                <input id="cropConsumption" type="number" min="0" value="0">
             </div>
 
         </div>
@@ -363,9 +187,98 @@
     </section>
 
 
-    <!-- ============================= -->
+    <!-- TROOPS -->
+
+    <section class="card">
+
+        <h2>⚔️ צבא רומאי</h2>
+
+        <div class="grid">
+
+            <div class="field">
+                <label>לגיונרים</label>
+                <input id="legionnaire" type="number" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>פרטוריאנים</label>
+                <input id="praetorian" type="number" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>אימפריאנים</label>
+                <input id="imperian" type="number" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>Equites Legati</label>
+                <input id="equitesLegati" type="number" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>Equites Imperatoris</label>
+                <input id="equitesImperatoris" type="number" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>Equites Caesaris</label>
+                <input id="equitesCaesaris" type="number" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>אילי ניגוח</label>
+                <input id="ram" type="number" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>קטפולטות אש</label>
+                <input id="fireCatapult" type="number" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>סנאטורים</label>
+                <input id="senator" type="number" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>מתיישבים</label>
+                <input id="settler" type="number" min="0" value="0">
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- HERO -->
+
+    <section class="card">
+
+        <h2>🦸 גיבור</h2>
+
+        <div class="grid">
+
+            <div class="field">
+                <label>רמת גיבור</label>
+                <input id="heroLevel" type="number" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>ניסיון</label>
+                <input id="heroXP" type="number" min="0" value="0">
+            </div>
+
+            <div class="field">
+                <label>חיים %</label>
+                <input id="heroHealth" type="number" min="0" max="100" value="100">
+            </div>
+
+        </div>
+
+    </section>
+
+
     <!-- BUILDINGS -->
-    <!-- ============================= -->
 
     <section class="card">
 
@@ -374,102 +287,36 @@
         <div class="grid">
 
             <div class="field">
-
-                <label for="mainBuilding">
-                    בניין מרכזי
-                </label>
-
-                <input
-                    id="mainBuilding"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
-
+                <label>בניין מרכזי</label>
+                <input id="mainBuilding" type="number" min="0" value="0">
             </div>
 
-
             <div class="field">
-
-                <label for="residence">
-                    מגורים מלכותיים
-                </label>
-
-                <input
-                    id="residence"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
-
+                <label>מגורים מלכותיים</label>
+                <input id="residence" type="number" min="0" value="0">
             </div>
 
-
             <div class="field">
-
-                <label for="heroMansion">
-                    אחוזת גיבור
-                </label>
-
-                <input
-                    id="heroMansion"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
-
+                <label>אחוזת גיבור</label>
+                <input id="heroMansion" type="number" min="0" value="0">
             </div>
 
-
             <div class="field">
-
-                <label for="barracks">
-                    קסרקטין
-                </label>
-
-                <input
-                    id="barracks"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
-
+                <label>קסרקטין</label>
+                <input id="barracks" type="number" min="0" value="0">
             </div>
 
-
             <div class="field">
-
-                <label for="stable">
-                    אורווה
-                </label>
-
-                <input
-                    id="stable"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
-
+                <label>אורווה</label>
+                <input id="stable" type="number" min="0" value="0">
             </div>
 
-
             <div class="field">
-
-                <label for="market">
-                    שוק
-                </label>
-
-                <input
-                    id="market"
-                    type="number"
-                    min="0"
-                    value="0"
-                >
-
+                <label>שוק</label>
+                <input id="market" type="number" min="0" value="0">
             </div>
 
         </div>
-
 
         <div class="button-row">
 
@@ -477,11 +324,9 @@
                 💾 שמור כפר
             </button>
 
-
             <button
                 onclick="clearForm()"
-                class="secondary"
-            >
+                class="secondary">
                 🗑️ נקה
             </button>
 
@@ -490,9 +335,7 @@
     </section>
 
 
-    <!-- ============================= -->
     <!-- SAVED VILLAGES -->
-    <!-- ============================= -->
 
     <section class="card">
 
@@ -509,9 +352,7 @@
     </section>
 
 
-    <!-- ============================= -->
     <!-- AI -->
-    <!-- ============================= -->
 
     <section class="card">
 
@@ -519,18 +360,11 @@
 
         <div class="ai-box">
 
-            <strong>
-                מנוע הניתוח מוכן.
-            </strong>
+            <strong>מנוע הניתוח מוכן.</strong>
 
             <p>
-                כרגע המערכת שומרת ומרכזת את נתוני הכפרים שלך.
-            </p>
-
-            <p>
-                בשלב הבא נתחיל להכניס לוגיקה אמיתית:
-                חישוב משאבים, יבול, צבא,
-                עלויות וזמני בנייה.
+                לאחר הזנת הנתונים המערכת תוכל
+                להתחיל לנתח את מצב החשבון.
             </p>
 
         </div>
@@ -540,10 +374,7 @@
 </main>
 
 
-<!-- JavaScript -->
-
 <script src="app.js"></script>
 
 </body>
-
 </html>
