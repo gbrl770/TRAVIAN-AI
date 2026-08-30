@@ -507,21 +507,8 @@ function renderVillages() {
 // ========================================
 
 function updateAI() {
-
-    const container =
-        document.getElementById("aiAnalysis");
-
-
-    if (!container) return;
-
-
-    if (!account.villages.length) {
-
-        container.textContent =
-            "הוסף נתוני כפר כדי לקבל ניתוח.";
-
-        return;
-    }
+    getAIRecommendations();
+}
 
 
     const villages =
