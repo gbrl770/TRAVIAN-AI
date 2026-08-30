@@ -1,562 +1,371 @@
-let account = JSON.parse(
-    localStorage.getItem("travianAccount")
-) || {
-    tribe: "Romans",
-    serverSpeed: 3,
-    villages: []
+let account=JSON.parse(localStorage.getItem("travianAccount"))||{
+tribe:"Romans",
+serverSpeed:3,
+villages:[]
 };
 
-let editingVillageId = null;
+let editingVillageId=null;
 
+const ids=[
+"villageName","coordinates","population","isCapital",
+"wood","clay","iron","crop",
+"woodProd","clayProd","ironProd","cropProd",
+"warehouse","granary","cropConsumption",
+"mainBuilding","residence","palace","heroMansion",
+"warehouseBuilding","granaryBuilding","barracks","stable",
+"workshop","academy","smithy","market","rallyPoint","cityWall",
+"legionnaire","praetorian","imperian","equitesLegati",
+"equitesImperatoris","equitesCaesaris","ram","fireCatapult",
+"senator","settler","heroLevel","heroXP","heroHealth",
+"oasisCount","oasisWood","oasisClay","oasisIron","oasisCrop",
+"buildingQueue","fieldQueue","barracksQueue","stableQueue",
+"resourceFields"
+];
 
-// ================================
-// HELPERS
-// ================================
-
-function value(id) {
-    const element = document.getElementById(id);
-    return element ? element.value : "";
+function value(id){
+const e=document.getElementById(id);
+return e?e.value:"";
 }
 
-function number(id) {
-    return Number(value(id)) || 0;
+function num(id){
+return Number(value(id))||0;
 }
 
-function setValue(id, value) {
-    const element = document.getElementById(id);
-
-    if (element) {
-        element.value = value ?? "";
-    }
+function set(id,v){
+const e=document.getElementById(id);
+if(e)e.value=v??"";
 }
 
-
-// ================================
-// SAVE VILLAGE
-// ================================
-
-function saveVillage() {
-
-    const name = value("villageName").trim();
-
-    if (!name) {
-        alert("נא להזין שם כפר.");
-        return;
-    }
-
-    const villageData = {
-
-        name: name,
-
-        coordinates: value("coordinates"),
-
-        population: number("population"),
-
-        isCapital: value("isCapital") === "true",
-
-        resources: {
-            wood: number("wood"),
-            clay: number("clay"),
-            iron: number("iron"),
-            crop: number("crop")
-        },
-
-        production: {
-            wood: number("woodProd"),
-            clay: number("clayProd"),
-            iron: number("ironProd"),
-            crop: number("cropProd")
-        },
-
-        storage: {
-            warehouse: number("warehouse"),
-            granary: number("granary")
-        },
-
-        cropConsumption: number("cropConsumption"),
-
-        fields: {
-            wood: [],
-            clay: [],
-            iron: [],
-            crop: []
-        },
-
-        buildings: {},
-
-        troops: {
-            legionnaire: number("legionnaire"),
-            praetorian: number("praetorian"),
-            imperian: number("imperian"),
-            equitesLegati: number("equitesLegati"),
-            equitesImperatoris: number("equitesImperatoris"),
-            equitesCaesaris: number("equitesCaesaris"),
-            ram: number("ram"),
-            fireCatapult: number("fireCatapult"),
-            senator: number("senator"),
-            settler: number("settler")
-        },
-
-        hero: {
-            level: number("heroLevel"),
-            experience: number("heroXP"),
-            health: number("heroHealth")
-        },
-
-        queues: {
-            building: [],
-            resourceField: [],
-            barracks: [],
-            stable: [],
-            workshop: [],
-            academy: [],
-            smithy: []
-        },
-
-        updatedAt: new Date().toISOString()
-    };
-
-
-    // EDIT EXISTING VILLAGE
-
-    if (editingVillageId !== null) {
-
-        const index =
-            account.villages.findIndex(
-                village => village.id === editingVillageId
-            );
-
-        if (index !== -1) {
-
-            account.villages[index] = {
-                ...account.villages[index],
-                ...villageData
-            };
-
-        }
-
-        editingVillageId = null;
-
-    }
-
-    // CREATE NEW VILLAGE
-
-    else {
-
-        account.villages.push({
-            id: Date.now(),
-            ...villageData
-        });
-
-    }
-
-
-    saveAccount();
-
-    renderVillages();
-
-    clearForm();
-
-    alert("הכפר נשמר בהצלחה.");
+function saveAccount(){
+localStorage.setItem("travianAccount",JSON.stringify(account));
 }
 
+function saveVillage(){
 
-// ================================
-// EDIT VILLAGE
-// ================================
+const name=value("villageName").trim();
 
-function editVillage(id) {
-
-    const village =
-        account.villages.find(
-            village => village.id === id
-        );
-
-    if (!village) return;
-
-
-    editingVillageId = id;
-
-
-    setValue("villageName", village.name);
-
-    setValue("coordinates", village.coordinates);
-
-    setValue("population", village.population);
-
-    setValue(
-        "isCapital",
-        village.isCapital ? "true" : "false"
-    );
-
-
-    setValue("wood", village.resources.wood);
-    setValue("clay", village.resources.clay);
-    setValue("iron", village.resources.iron);
-    setValue("crop", village.resources.crop);
-
-
-    setValue("woodProd", village.production.wood);
-    setValue("clayProd", village.production.clay);
-    setValue("ironProd", village.production.iron);
-    setValue("cropProd", village.production.crop);
-
-
-    setValue(
-        "warehouse",
-        village.storage?.warehouse
-    );
-
-    setValue(
-        "granary",
-        village.storage?.granary
-    );
-
-    setValue(
-        "cropConsumption",
-        village.cropConsumption
-    );
-
-
-    setValue(
-        "legionnaire",
-        village.troops.legionnaire
-    );
-
-    setValue(
-        "praetorian",
-        village.troops.praetorian
-    );
-
-    setValue(
-        "imperian",
-        village.troops.imperian
-    );
-
-    setValue(
-        "equitesLegati",
-        village.troops.equitesLegati
-    );
-
-    setValue(
-        "equitesImperatoris",
-        village.troops.equitesImperatoris
-    );
-
-    setValue(
-        "equitesCaesaris",
-        village.troops.equitesCaesaris
-    );
-
-    setValue(
-        "ram",
-        village.troops.ram
-    );
-
-    setValue(
-        "fireCatapult",
-        village.troops.fireCatapult
-    );
-
-    setValue(
-        "senator",
-        village.troops.senator
-    );
-
-    setValue(
-        "settler",
-        village.troops.settler
-    );
-
-
-    setValue(
-        "heroLevel",
-        village.hero?.level
-    );
-
-    setValue(
-        "heroXP",
-        village.hero?.experience
-    );
-
-    setValue(
-        "heroHealth",
-        village.hero?.health ?? 100
-    );
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
+if(!name){
+alert("נא להזין שם כפר");
+return;
 }
 
+const buildings={};
 
-// ================================
-// SAVE ACCOUNT
-// ================================
+[
+"mainBuilding","residence","palace","heroMansion",
+"warehouseBuilding","granaryBuilding","barracks",
+"stable","workshop","academy","smithy","market",
+"rallyPoint","cityWall"
+].forEach(x=>buildings[x]=num(x));
 
-function saveAccount() {
+const village={
+id:editingVillageId||Date.now(),
+name,
+coordinates:value("coordinates"),
+population:num("population"),
+isCapital:value("isCapital")==="true",
 
-    localStorage.setItem(
-        "travianAccount",
-        JSON.stringify(account)
-    );
+resources:{
+wood:num("wood"),
+clay:num("clay"),
+iron:num("iron"),
+crop:num("crop")
+},
 
+production:{
+wood:num("woodProd"),
+clay:num("clayProd"),
+iron:num("ironProd"),
+crop:num("cropProd")
+},
+
+storage:{
+warehouse:num("warehouse"),
+granary:num("granary")
+},
+
+cropConsumption:num("cropConsumption"),
+
+resourceFields:value("resourceFields"),
+
+buildings,
+
+troops:{
+legionnaire:num("legionnaire"),
+praetorian:num("praetorian"),
+imperian:num("imperian"),
+equitesLegati:num("equitesLegati"),
+equitesImperatoris:num("equitesImperatoris"),
+equitesCaesaris:num("equitesCaesaris"),
+ram:num("ram"),
+fireCatapult:num("fireCatapult"),
+senator:num("senator"),
+settler:num("settler")
+},
+
+hero:{
+level:num("heroLevel"),
+experience:num("heroXP"),
+health:num("heroHealth")
+},
+
+oasis:{
+count:num("oasisCount"),
+wood:num("oasisWood"),
+clay:num("oasisClay"),
+iron:num("oasisIron"),
+crop:num("oasisCrop")
+},
+
+queues:{
+building:value("buildingQueue"),
+field:value("fieldQueue"),
+barracks:value("barracksQueue"),
+stable:value("stableQueue")
+},
+
+updatedAt:new Date().toISOString()
+};
+
+const index=account.villages.findIndex(v=>v.id===village.id);
+
+if(index>=0)
+account.villages[index]=village;
+else
+account.villages.push(village);
+
+editingVillageId=null;
+
+saveAccount();
+renderVillages();
+clearForm();
 }
 
+function editVillage(id){
 
-// ================================
-// RENDER VILLAGES
-// ================================
+const v=account.villages.find(x=>x.id===id);
+if(!v)return;
 
-function renderVillages() {
+editingVillageId=id;
 
-    const container =
-        document.getElementById("villagesContainer");
+set("villageName",v.name);
+set("coordinates",v.coordinates);
+set("population",v.population);
+set("isCapital",v.isCapital?"true":"false");
 
-    if (!container) return;
+["wood","clay","iron","crop"].forEach(x=>set(x,v.resources[x]));
+["wood","clay","iron","crop"].forEach(x=>set(x+"Prod",v.production[x]));
 
+set("warehouse",v.storage.warehouse);
+set("granary",v.storage.granary);
+set("cropConsumption",v.cropConsumption);
 
-    if (account.villages.length === 0) {
+set("resourceFields",v.resourceFields);
 
-        container.innerHTML = `
-            <div class="empty">
-                עדיין לא הוספת כפרים.
-            </div>
-        `;
+Object.entries(v.buildings||{}).forEach(([k,val])=>set(k,val));
 
-        updateDashboard();
+Object.entries(v.troops||{}).forEach(([k,val])=>set(k,val));
 
-        return;
-    }
+set("heroLevel",v.hero?.level);
+set("heroXP",v.hero?.experience);
+set("heroHealth",v.hero?.health);
 
+Object.entries(v.oasis||{}).forEach(([k,val])=>set("oasis"+k.charAt(0).toUpperCase()+k.slice(1),val));
 
-    let html = `
+set("buildingQueue",v.queues?.building);
+set("fieldQueue",v.queues?.field);
+set("barracksQueue",v.queues?.barracks);
+set("stableQueue",v.queues?.stable);
 
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>כפר</th>
-                    <th>מיקום</th>
-                    <th>אוכלוסייה</th>
-                    <th>עץ</th>
-                    <th>טיט</th>
-                    <th>ברזל</th>
-                    <th>יבול</th>
-                    <th>יבול נטו</th>
-                    <th>פעולות</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-    `;
-
-
-    account.villages.forEach(village => {
-
-        const netCrop =
-            village.production.crop -
-            village.cropConsumption;
-
-
-        html += `
-
-            <tr>
-
-                <td>
-                    <strong>${village.name}</strong>
-                </td>
-
-                <td>
-                    ${village.coordinates || "-"}
-                </td>
-
-                <td>
-                    ${village.population.toLocaleString()}
-                </td>
-
-                <td>
-                    ${village.resources.wood.toLocaleString()}
-                </td>
-
-                <td>
-                    ${village.resources.clay.toLocaleString()}
-                </td>
-
-                <td>
-                    ${village.resources.iron.toLocaleString()}
-                </td>
-
-                <td>
-                    ${village.resources.crop.toLocaleString()}
-                </td>
-
-                <td>
-                    ${netCrop.toLocaleString()}/h
-                </td>
-
-                <td>
-
-                    <button
-                        onclick="editVillage(${village.id})">
-                        ✏️ ערוך
-                    </button>
-
-                    <button
-                        onclick="deleteVillage(${village.id})">
-                        🗑️ מחק
-                    </button>
-
-                </td>
-
-            </tr>
-
-        `;
-
-    });
-
-
-    html += `
-
-            </tbody>
-
-        </table>
-
-    `;
-
-
-    container.innerHTML = html;
-
-    updateDashboard();
+window.scrollTo({top:0,behavior:"smooth"});
 }
 
+function deleteVillage(id){
 
-// ================================
-// DELETE
-// ================================
+if(!confirm("למחוק את הכפר?"))return;
 
-function deleteVillage(id) {
+account.villages=account.villages.filter(v=>v.id!==id);
 
-    if (!confirm("למחוק את הכפר?")) {
-        return;
-    }
-
-
-    account.villages =
-        account.villages.filter(
-            village => village.id !== id
-        );
-
-
-    saveAccount();
-
-    renderVillages();
+saveAccount();
+renderVillages();
 }
 
+function renderVillages(){
 
-// ================================
-// DASHBOARD
-// ================================
+const c=document.getElementById("villagesContainer");
 
-function updateDashboard() {
-
-    let population = 0;
-    let troops = 0;
-
-
-    account.villages.forEach(village => {
-
-        population += village.population;
-
-
-        Object.values(village.troops)
-            .forEach(amount => {
-
-                troops += Number(amount) || 0;
-
-            });
-
-    });
-
-
-    const villageCount =
-        document.getElementById("villageCount");
-
-    const populationTotal =
-        document.getElementById("populationTotal");
-
-    const troopsTotal =
-        document.getElementById("troopsTotal");
-
-
-    if (villageCount)
-        villageCount.value =
-            account.villages.length;
-
-
-    if (populationTotal)
-        populationTotal.value =
-            population.toLocaleString();
-
-
-    if (troopsTotal)
-        troopsTotal.value =
-            troops.toLocaleString();
+if(!account.villages.length){
+c.innerHTML='<div class="empty">עדיין לא הוספת כפרים.</div>';
+updateDashboard();
+return;
 }
 
+let html=`
+<table>
+<thead>
+<tr>
+<th>כפר</th>
+<th>מיקום</th>
+<th>אוכלוסייה</th>
+<th>עץ</th>
+<th>טיט</th>
+<th>ברזל</th>
+<th>יבול</th>
+<th>יבול נטו</th>
+<th>פעולות</th>
+</tr>
+</thead>
+<tbody>
+`;
 
-// ================================
-// CLEAR FORM
-// ================================
+account.villages.forEach(v=>{
 
-function clearForm() {
+const net=v.production.crop-v.cropConsumption;
 
-    editingVillageId = null;
+html+=`
+<tr>
+<td><strong>${v.name}</strong>${v.isCapital?" 🏛️":""}</td>
+<td>${v.coordinates||"-"}</td>
+<td>${v.population.toLocaleString()}</td>
+<td>${v.resources.wood.toLocaleString()}</td>
+<td>${v.resources.clay.toLocaleString()}</td>
+<td>${v.resources.iron.toLocaleString()}</td>
+<td>${v.resources.crop.toLocaleString()}</td>
+<td>${net.toLocaleString()}/h</td>
+<td>
+<button onclick="editVillage(${v.id})">✏️</button>
+<button onclick="deleteVillage(${v.id})">🗑️</button>
+</td>
+</tr>
+`;
+});
 
+html+="</tbody></table>";
 
-    document
-        .querySelectorAll("input")
-        .forEach(input => {
+c.innerHTML=html;
 
-            if (input.readOnly) return;
-
-            if (input.type === "number") {
-                input.value = 0;
-            }
-
-            else {
-                input.value = "";
-            }
-
-        });
-
-
-    const capital =
-        document.getElementById("isCapital");
-
-    if (capital) {
-        capital.value = "false";
-    }
-
+updateDashboard();
+updateAI();
 }
 
+function updateDashboard(){
 
-// ================================
-// START
-// ================================
+let population=0;
+let troops=0;
+let crop=0;
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+account.villages.forEach(v=>{
 
-        renderVillages();
+population+=v.population;
 
-    }
+Object.values(v.troops||{}).forEach(x=>troops+=Number(x)||0);
+
+crop+=v.production.crop-v.cropConsumption;
+});
+
+set("villageCount",account.villages.length);
+set("populationTotal",population.toLocaleString());
+set("troopsTotal",troops.toLocaleString());
+set("netCropTotal",crop.toLocaleString());
+}
+
+function updateAI(){
+
+const c=document.getElementById("aiAnalysis");
+
+if(!account.villages.length){
+c.textContent="הוסף נתוני כפר כדי לקבל ניתוח.";
+return;
+}
+
+let bestCrop=null;
+let lowestCrop=null;
+
+account.villages.forEach(v=>{
+const net=v.production.crop-v.cropConsumption;
+
+if(!bestCrop||net>bestCrop.net)bestCrop={v,net};
+if(!lowestCrop||net<lowestCrop.net)lowestCrop={v,net};
+});
+
+c.innerHTML=`
+<strong>ניתוח ראשוני</strong><br>
+כפר בעל יבול נטו הגבוה ביותר:
+<strong>${bestCrop.v.name}</strong> — ${bestCrop.net.toLocaleString()}/שעה<br>
+כפר בעל יבול נטו הנמוך ביותר:
+<strong>${lowestCrop.v.name}</strong> — ${lowestCrop.net.toLocaleString()}/שעה<br>
+סה"כ כפרים: ${account.villages.length}
+`;
+}
+
+function clearForm(){
+
+editingVillageId=null;
+
+ids.forEach(id=>{
+const e=document.getElementById(id);
+if(!e)return;
+
+if(e.type==="number")e.value=0;
+else if(e.tagName==="SELECT")e.value="false";
+else e.value="";
+});
+
+set("heroHealth",100);
+}
+
+function exportData(){
+
+const blob=new Blob(
+[JSON.stringify(account,null,2)],
+{type:"application/json"}
 );
+
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+a.href=url;
+a.download="travian-ai-account.json";
+a.click();
+
+URL.revokeObjectURL(url);
+}
+
+function importData(event){
+
+const file=event.target.files[0];
+
+if(!file)return;
+
+const reader=new FileReader();
+
+reader.onload=e=>{
+
+try{
+
+const data=JSON.parse(e.target.result);
+
+if(!data.villages||!Array.isArray(data.villages))
+throw new Error();
+
+account=data;
+
+saveAccount();
+renderVillages();
+
+alert("הנתונים נטענו בהצלחה.");
+
+}catch{
+
+alert("קובץ נתונים לא תקין.");
+
+}
+
+};
+
+reader.readAsText(file);
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+renderVillages();
+});
