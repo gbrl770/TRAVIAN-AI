@@ -202,3 +202,12 @@ tr:hover td {
         font-size: 26px;
     }
 }
+
+.ai-item {
+    padding: 12px;
+    margin-bottom: 8px;
+    background: #ffffff;
+    border-right: 4px solid #2563eb;
+    border-radius: 6px;
+    line-height: 1.7;
+}
