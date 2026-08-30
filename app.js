@@ -1,7 +1,3 @@
-// ========================================
-// TRAVIAN AI - ACCOUNT DATA ENGINE
-// ========================================
-
 let account = JSON.parse(
     localStorage.getItem("travianAccount")
 ) || {
@@ -10,10 +6,12 @@ let account = JSON.parse(
     villages: []
 };
 
+let editingVillageId = null;
 
-// ========================================
+
+// ================================
 // HELPERS
-// ========================================
+// ================================
 
 function value(id) {
     const element = document.getElementById(id);
@@ -24,10 +22,18 @@ function number(id) {
     return Number(value(id)) || 0;
 }
 
+function setValue(id, value) {
+    const element = document.getElementById(id);
 
-// ========================================
-// CREATE VILLAGE
-// ========================================
+    if (element) {
+        element.value = value ?? "";
+    }
+}
+
+
+// ================================
+// SAVE VILLAGE
+// ================================
 
 function saveVillage() {
 
@@ -38,9 +44,7 @@ function saveVillage() {
         return;
     }
 
-    const village = {
-
-        id: Date.now(),
+    const villageData = {
 
         name: name,
 
@@ -49,10 +53,6 @@ function saveVillage() {
         population: number("population"),
 
         isCapital: value("isCapital") === "true",
-
-        // -------------------------------
-        // RESOURCES
-        // -------------------------------
 
         resources: {
             wood: number("wood"),
@@ -75,10 +75,6 @@ function saveVillage() {
 
         cropConsumption: number("cropConsumption"),
 
-        // -------------------------------
-        // RESOURCE FIELDS
-        // -------------------------------
-
         fields: {
             wood: [],
             clay: [],
@@ -86,15 +82,7 @@ function saveVillage() {
             crop: []
         },
 
-        // -------------------------------
-        // BUILDINGS
-        // -------------------------------
-
         buildings: {},
-
-        // -------------------------------
-        // ROMAN TROOPS
-        // -------------------------------
 
         troops: {
             legionnaire: number("legionnaire"),
@@ -109,19 +97,11 @@ function saveVillage() {
             settler: number("settler")
         },
 
-        // -------------------------------
-        // HERO
-        // -------------------------------
-
         hero: {
             level: number("heroLevel"),
             experience: number("heroXP"),
             health: number("heroHealth")
         },
-
-        // -------------------------------
-        // QUEUES
-        // -------------------------------
 
         queues: {
             building: [],
@@ -137,7 +117,39 @@ function saveVillage() {
     };
 
 
-    account.villages.push(village);
+    // EDIT EXISTING VILLAGE
+
+    if (editingVillageId !== null) {
+
+        const index =
+            account.villages.findIndex(
+                village => village.id === editingVillageId
+            );
+
+        if (index !== -1) {
+
+            account.villages[index] = {
+                ...account.villages[index],
+                ...villageData
+            };
+
+        }
+
+        editingVillageId = null;
+
+    }
+
+    // CREATE NEW VILLAGE
+
+    else {
+
+        account.villages.push({
+            id: Date.now(),
+            ...villageData
+        });
+
+    }
+
 
     saveAccount();
 
@@ -145,13 +157,145 @@ function saveVillage() {
 
     clearForm();
 
-    alert("הכפר נשמר.");
+    alert("הכפר נשמר בהצלחה.");
 }
 
 
-// ========================================
+// ================================
+// EDIT VILLAGE
+// ================================
+
+function editVillage(id) {
+
+    const village =
+        account.villages.find(
+            village => village.id === id
+        );
+
+    if (!village) return;
+
+
+    editingVillageId = id;
+
+
+    setValue("villageName", village.name);
+
+    setValue("coordinates", village.coordinates);
+
+    setValue("population", village.population);
+
+    setValue(
+        "isCapital",
+        village.isCapital ? "true" : "false"
+    );
+
+
+    setValue("wood", village.resources.wood);
+    setValue("clay", village.resources.clay);
+    setValue("iron", village.resources.iron);
+    setValue("crop", village.resources.crop);
+
+
+    setValue("woodProd", village.production.wood);
+    setValue("clayProd", village.production.clay);
+    setValue("ironProd", village.production.iron);
+    setValue("cropProd", village.production.crop);
+
+
+    setValue(
+        "warehouse",
+        village.storage?.warehouse
+    );
+
+    setValue(
+        "granary",
+        village.storage?.granary
+    );
+
+    setValue(
+        "cropConsumption",
+        village.cropConsumption
+    );
+
+
+    setValue(
+        "legionnaire",
+        village.troops.legionnaire
+    );
+
+    setValue(
+        "praetorian",
+        village.troops.praetorian
+    );
+
+    setValue(
+        "imperian",
+        village.troops.imperian
+    );
+
+    setValue(
+        "equitesLegati",
+        village.troops.equitesLegati
+    );
+
+    setValue(
+        "equitesImperatoris",
+        village.troops.equitesImperatoris
+    );
+
+    setValue(
+        "equitesCaesaris",
+        village.troops.equitesCaesaris
+    );
+
+    setValue(
+        "ram",
+        village.troops.ram
+    );
+
+    setValue(
+        "fireCatapult",
+        village.troops.fireCatapult
+    );
+
+    setValue(
+        "senator",
+        village.troops.senator
+    );
+
+    setValue(
+        "settler",
+        village.troops.settler
+    );
+
+
+    setValue(
+        "heroLevel",
+        village.hero?.level
+    );
+
+    setValue(
+        "heroXP",
+        village.hero?.experience
+    );
+
+    setValue(
+        "heroHealth",
+        village.hero?.health ?? 100
+    );
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+// ================================
 // SAVE ACCOUNT
-// ========================================
+// ================================
 
 function saveAccount() {
 
@@ -163,9 +307,9 @@ function saveAccount() {
 }
 
 
-// ========================================
+// ================================
 // RENDER VILLAGES
-// ========================================
+// ================================
 
 function renderVillages() {
 
@@ -173,6 +317,7 @@ function renderVillages() {
         document.getElementById("villagesContainer");
 
     if (!container) return;
+
 
     if (account.villages.length === 0) {
 
@@ -189,10 +334,13 @@ function renderVillages() {
 
 
     let html = `
+
         <table>
 
             <thead>
+
                 <tr>
+
                     <th>כפר</th>
                     <th>מיקום</th>
                     <th>אוכלוסייה</th>
@@ -201,8 +349,10 @@ function renderVillages() {
                     <th>ברזל</th>
                     <th>יבול</th>
                     <th>יבול נטו</th>
-                    <th>פעולה</th>
+                    <th>פעולות</th>
+
                 </tr>
+
             </thead>
 
             <tbody>
@@ -217,6 +367,7 @@ function renderVillages() {
 
 
         html += `
+
             <tr>
 
                 <td>
@@ -252,19 +403,32 @@ function renderVillages() {
                 </td>
 
                 <td>
-                    <button onclick="deleteVillage(${village.id})">
-                        מחק
+
+                    <button
+                        onclick="editVillage(${village.id})">
+                        ✏️ ערוך
                     </button>
+
+                    <button
+                        onclick="deleteVillage(${village.id})">
+                        🗑️ מחק
+                    </button>
+
                 </td>
 
             </tr>
+
         `;
+
     });
 
 
     html += `
+
             </tbody>
+
         </table>
+
     `;
 
 
@@ -274,9 +438,9 @@ function renderVillages() {
 }
 
 
-// ========================================
+// ================================
 // DELETE
-// ========================================
+// ================================
 
 function deleteVillage(id) {
 
@@ -284,10 +448,12 @@ function deleteVillage(id) {
         return;
     }
 
+
     account.villages =
         account.villages.filter(
             village => village.id !== id
         );
+
 
     saveAccount();
 
@@ -295,14 +461,13 @@ function deleteVillage(id) {
 }
 
 
-// ========================================
+// ================================
 // DASHBOARD
-// ========================================
+// ================================
 
 function updateDashboard() {
 
     let population = 0;
-
     let troops = 0;
 
 
@@ -310,9 +475,12 @@ function updateDashboard() {
 
         population += village.population;
 
+
         Object.values(village.troops)
             .forEach(amount => {
-                troops += amount;
+
+                troops += Number(amount) || 0;
+
             });
 
     });
@@ -332,9 +500,11 @@ function updateDashboard() {
         villageCount.value =
             account.villages.length;
 
+
     if (populationTotal)
         populationTotal.value =
             population.toLocaleString();
+
 
     if (troopsTotal)
         troopsTotal.value =
@@ -342,11 +512,14 @@ function updateDashboard() {
 }
 
 
-// ========================================
+// ================================
 // CLEAR FORM
-// ========================================
+// ================================
 
 function clearForm() {
+
+    editingVillageId = null;
+
 
     document
         .querySelectorAll("input")
@@ -363,16 +536,27 @@ function clearForm() {
             }
 
         });
+
+
+    const capital =
+        document.getElementById("isCapital");
+
+    if (capital) {
+        capital.value = "false";
+    }
+
 }
 
 
-// ========================================
+// ================================
 // START
-// ========================================
+// ================================
 
 document.addEventListener(
     "DOMContentLoaded",
     () => {
+
         renderVillages();
+
     }
 );
